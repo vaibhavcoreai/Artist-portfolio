@@ -9,17 +9,13 @@ import { supabase } from '../lib/supabase';
 
 export function GalleryPage() {
   const [items, setItems] = useState<Artwork[]>([]);
-  const [visibleCount, setVisibleCount] = useState(6);
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
   const [inquiryArtwork, setInquiryArtwork] = useState<Artwork | null>(null);
   const [fullScreenArtwork, setFullScreenArtwork] = useState<Artwork | null>(null);
 
   const PAGE_SIZE = 6;
-  const hasMore = visibleCount < items.length;
-
-  const handleLoadMore = () => {
-    setVisibleCount(prev => prev + PAGE_SIZE);
-  };
+  const totalPages = Math.ceil(items.length / PAGE_SIZE);
 
   useEffect(() => {
     async function loadData() {
@@ -87,6 +83,31 @@ export function GalleryPage() {
               and mixed media — each piece a meditation 
               on light, memory, and the quiet poetry of the everyday.
             </p>
+
+            {/* Scroll Indicator */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.5, duration: 1 }}
+              className="mt-12 flex items-center space-x-4 group cursor-pointer"
+              onClick={() => {
+                window.scrollTo({
+                  top: window.innerHeight * 0.8,
+                  behavior: 'smooth'
+                });
+              }}
+            >
+              <div className="w-px h-12 bg-gradient-to-b from-aged-gold/50 to-transparent relative overflow-hidden">
+                <motion.div 
+                  animate={{ y: [0, 48] }}
+                  transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                  className="absolute top-0 left-0 w-full h-1/2 bg-aged-gold shadow-[0_0_10px_rgba(184,134,11,0.5)]"
+                />
+              </div>
+              <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-aged-gold/60 group-hover:text-aged-gold transition-colors">
+                Explore Collection
+              </span>
+            </motion.div>
           </motion.div>
 
           {/* Stats bar */}
@@ -129,19 +150,19 @@ export function GalleryPage() {
           ) : (
             <>
               <motion.div
+                key={currentPage} // Reset animation on page change
                 initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: '-50px' }}
+                animate="show"
                 variants={{
                   hidden: {},
                   show: {
                     transition: { staggerChildren: 0.1 }
                   }
                 }}
-                className="columns-2 lg:columns-3 gap-3 md:gap-4 [column-fill:_balance] mx-auto"
+                className="columns-2 lg:columns-4 gap-3 md:gap-4 [column-fill:_balance] mx-auto"
               >
-                {items.slice(0, visibleCount).map((artwork) => (
-                  <div key={artwork.id} className="break-inside-avoid">
+                {items.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).map((artwork) => (
+                  <div key={artwork.id} className="break-inside-avoid mb-4">
                     <ArtworkCard
                       artwork={artwork}
                       onClick={setSelectedArtwork}
@@ -152,22 +173,76 @@ export function GalleryPage() {
                 ))}
               </motion.div>
 
-              {/* Load More Button */}
-              {hasMore && (
-                <div className="flex justify-center mt-24">
-                  <button
-                    onClick={handleLoadMore}
-                    data-cursor="hover"
-                    className="group relative px-12 py-4 overflow-hidden rounded-full border border-aged-gold/30 hover:border-aged-gold transition-colors duration-500"
+              {/* Pagination & Navigation */}
+              <div className="flex flex-col items-center mt-24 space-y-12">
+                
+                {/* Current Page Status */}
+                <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-aged-gold/40">
+                  Page {currentPage} of {totalPages}
+                </span>
+
+                <div className="flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-12">
+                  {/* Prev Button */}
+                  <button 
+                    onClick={() => {
+                      setCurrentPage(prev => Math.max(1, prev - 1));
+                      window.scrollTo({ top: 300, behavior: 'smooth' });
+                    }}
+                    disabled={currentPage === 1}
+                    className="flex items-center space-x-4 px-6 py-3 rounded-full border border-white/5 hover:border-aged-gold/30 disabled:opacity-30 disabled:pointer-events-none transition-all duration-500 hover:bg-white/[0.02] group"
                   >
-                    <div className="absolute inset-0 bg-aged-gold/5 -translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-                    <span className="relative font-sans text-[11px] tracking-[0.3em] uppercase text-warm-ivory group-hover:text-near-black flex items-center">
-                      Load More 
-                      <span className="ml-4 opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all">↓</span>
+                    <svg fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-5 h-5 text-warm-ivory/50 group-hover:text-aged-gold transition-transform group-hover:-translate-x-2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                    <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-warm-ivory/60 group-hover:text-warm-ivory">
+                      Previous
                     </span>
                   </button>
+
+                  {/* Page Numbers */}
+                  <div className="flex items-center space-x-6">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
+                      <button
+                        key={num}
+                        onClick={() => {
+                          setCurrentPage(num);
+                          window.scrollTo({ top: 300, behavior: 'smooth' });
+                        }}
+                        className={`w-12 h-12 rounded-full font-serif italic text-xl transition-all duration-500 relative flex items-center justify-center ${
+                          currentPage === num 
+                            ? 'text-aged-gold shadow-[0_0_30px_rgba(184,134,11,0.2)]' 
+                            : 'text-warm-ivory/30 hover:text-warm-ivory hover:bg-white/5'
+                        }`}
+                      >
+                        {currentPage === num && (
+                          <motion.div 
+                            layoutId="activePage"
+                            className="absolute inset-0 border border-aged-gold/50 rounded-full"
+                          />
+                        )}
+                        {num}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Next Button */}
+                  <button 
+                    onClick={() => {
+                      setCurrentPage(prev => Math.min(totalPages, prev + 1));
+                      window.scrollTo({ top: 300, behavior: 'smooth' });
+                    }}
+                    disabled={currentPage === totalPages}
+                    className="flex items-center space-x-4 px-6 py-3 rounded-full border border-white/5 hover:border-aged-gold/30 disabled:opacity-30 disabled:pointer-events-none transition-all duration-500 hover:bg-white/[0.02] group"
+                  >
+                    <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-warm-ivory/60 group-hover:text-warm-ivory">
+                      Next
+                    </span>
+                    <svg fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-5 h-5 text-warm-ivory/50 group-hover:text-aged-gold transition-transform group-hover:translate-x-2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                  </button>
                 </div>
-              )}
+              </div>
             </>
           )}
         </div>
