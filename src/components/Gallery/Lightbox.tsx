@@ -39,7 +39,7 @@ export function Lightbox({ artwork, onClose, onInquire, onFullscreen }: Lightbox
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="relative w-full lg:max-w-5xl max-w-xl max-h-[85vh] bg-[#111014] border border-white/10 shadow-3xl z-10 flex flex-col lg:flex-row rounded-[32px] overflow-hidden"
+        className="relative w-full lg:max-w-5xl max-w-xl max-h-[85vh] bg-[#111014] border border-white/10 shadow-3xl z-10 flex flex-col lg:flex-row rounded-[32px] overflow-y-auto lg:overflow-hidden"
       >
         <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-aged-gold to-transparent opacity-40 z-20" />
 
@@ -74,7 +74,7 @@ export function Lightbox({ artwork, onClose, onInquire, onFullscreen }: Lightbox
         </div>
 
         {/* Details Container */}
-        <div className="flex-1 p-8 md:p-12 flex flex-col h-full bg-[#111014] relative">
+        <div className="flex-1 p-6 pb-8 md:p-12 flex flex-col min-h-0 bg-[#111014] relative" style={{ WebkitOverflowScrolling: 'touch' }}>
           <div className="flex justify-between items-start mb-8 relative z-30">
             <div className="flex-1">
               <p className="font-sans text-[10px] tracking-[0.3em] text-aged-gold uppercase mb-3 text-left">
@@ -106,7 +106,7 @@ export function Lightbox({ artwork, onClose, onInquire, onFullscreen }: Lightbox
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 text-left">
+          <div className="flex-1 min-h-0 lg:overflow-y-auto custom-scrollbar pr-2 text-left">
             <div className="space-y-4 mb-10 pb-4 border-b border-white/5">
               {[
                 { label: 'Category', value: artwork.category },

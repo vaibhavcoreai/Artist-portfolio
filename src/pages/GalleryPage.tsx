@@ -104,7 +104,7 @@ export function GalleryPage() {
                   className="absolute top-0 left-0 w-full h-1/2 bg-aged-gold shadow-[0_0_10px_rgba(184,134,11,0.5)]"
                 />
               </div>
-              <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-aged-gold/60 group-hover:text-aged-gold transition-colors">
+              <span className="font-sans text-xs uppercase tracking-[0.3em] text-warm-ivory/70 group-hover:text-aged-gold transition-colors">
                 Explore Collection
               </span>
             </motion.div>
@@ -149,29 +149,33 @@ export function GalleryPage() {
             </div>
           ) : (
             <>
-              <motion.div
-                key={currentPage} // Reset animation on page change
-                initial="hidden"
-                animate="show"
-                variants={{
-                  hidden: {},
-                  show: {
-                    transition: { staggerChildren: 0.1 }
-                  }
-                }}
-                className="columns-2 lg:columns-4 gap-3 md:gap-4 [column-fill:_balance] mx-auto"
-              >
-                {items.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).map((artwork) => (
-                  <div key={artwork.id} className="break-inside-avoid mb-4">
-                    <ArtworkCard
-                      artwork={artwork}
-                      onClick={setSelectedArtwork}
-                      onInquire={setInquiryArtwork}
-                      isLightboxOpen={selectedArtwork?.id === artwork.id}
-                    />
-                  </div>
-                ))}
-              </motion.div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentPage}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className="columns-2 lg:columns-4 gap-3 md:gap-4 [column-fill:_balance] mx-auto"
+                >
+                  {items.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).map((artwork, i) => (
+                    <motion.div
+                      key={artwork.id}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: i * 0.06, duration: 0.4, ease: "easeOut" }}
+                      className="break-inside-avoid mb-4"
+                    >
+                      <ArtworkCard
+                        artwork={artwork}
+                        onClick={setSelectedArtwork}
+                        onInquire={setInquiryArtwork}
+                        isLightboxOpen={selectedArtwork?.id === artwork.id}
+                      />
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </AnimatePresence>
 
               {/* Pagination & Navigation */}
               <div className="flex flex-col items-center mt-24 space-y-12">
@@ -181,7 +185,7 @@ export function GalleryPage() {
                   Page {currentPage} of {totalPages}
                 </span>
 
-                <div className="flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-12">
+                <div className="flex items-center space-x-2 md:space-x-10">
                   {/* Prev Button */}
                   <button 
                     onClick={() => {
@@ -189,18 +193,18 @@ export function GalleryPage() {
                       window.scrollTo({ top: 300, behavior: 'smooth' });
                     }}
                     disabled={currentPage === 1}
-                    className="flex items-center space-x-4 px-6 py-3 rounded-full border border-white/5 hover:border-aged-gold/30 disabled:opacity-30 disabled:pointer-events-none transition-all duration-500 hover:bg-white/[0.02] group"
+                    className="flex items-center space-x-2 md:space-x-4 px-3 md:px-6 py-2 md:py-3 rounded-full border border-white/5 hover:border-aged-gold/30 disabled:opacity-30 disabled:pointer-events-none transition-all duration-500 hover:bg-white/[0.02] group"
                   >
-                    <svg fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-5 h-5 text-warm-ivory/50 group-hover:text-aged-gold transition-transform group-hover:-translate-x-2">
+                    <svg fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-4 h-4 md:w-5 md:h-5 text-warm-ivory/50 group-hover:text-aged-gold transition-transform group-hover:-translate-x-1">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                     </svg>
-                    <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-warm-ivory/60 group-hover:text-warm-ivory">
+                    <span className="hidden md:inline font-sans text-[10px] uppercase tracking-[0.3em] text-warm-ivory/60 group-hover:text-warm-ivory">
                       Previous
                     </span>
                   </button>
 
                   {/* Page Numbers */}
-                  <div className="flex items-center space-x-6">
+                  <div className="flex items-center space-x-2 md:space-x-6">
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
                       <button
                         key={num}
@@ -208,7 +212,7 @@ export function GalleryPage() {
                           setCurrentPage(num);
                           window.scrollTo({ top: 300, behavior: 'smooth' });
                         }}
-                        className={`w-12 h-12 rounded-full font-serif italic text-xl transition-all duration-500 relative flex items-center justify-center ${
+                        className={`w-10 h-10 md:w-12 md:h-12 rounded-full font-serif italic text-base md:text-xl transition-all duration-500 relative flex items-center justify-center ${
                           currentPage === num 
                             ? 'text-aged-gold shadow-[0_0_30px_rgba(184,134,11,0.2)]' 
                             : 'text-warm-ivory/30 hover:text-warm-ivory hover:bg-white/5'
@@ -232,12 +236,12 @@ export function GalleryPage() {
                       window.scrollTo({ top: 300, behavior: 'smooth' });
                     }}
                     disabled={currentPage === totalPages}
-                    className="flex items-center space-x-4 px-6 py-3 rounded-full border border-white/5 hover:border-aged-gold/30 disabled:opacity-30 disabled:pointer-events-none transition-all duration-500 hover:bg-white/[0.02] group"
+                    className="flex items-center space-x-2 md:space-x-4 px-3 md:px-6 py-2 md:py-3 rounded-full border border-white/5 hover:border-aged-gold/30 disabled:opacity-30 disabled:pointer-events-none transition-all duration-500 hover:bg-white/[0.02] group"
                   >
-                    <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-warm-ivory/60 group-hover:text-warm-ivory">
+                    <span className="hidden md:inline font-sans text-[10px] uppercase tracking-[0.3em] text-warm-ivory/60 group-hover:text-warm-ivory">
                       Next
                     </span>
-                    <svg fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-5 h-5 text-warm-ivory/50 group-hover:text-aged-gold transition-transform group-hover:translate-x-2">
+                    <svg fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-4 h-4 md:w-5 md:h-5 text-warm-ivory/50 group-hover:text-aged-gold transition-transform group-hover:translate-x-1">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                     </svg>
                   </button>

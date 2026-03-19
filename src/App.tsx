@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import { NavBar } from './components/NavBar/NavBar';
 import { Home } from './pages/Home';
 import { Admin } from './pages/Admin';
@@ -7,27 +9,42 @@ import { GalleryPage } from './pages/GalleryPage';
 import { InquiryPage } from './pages/InquiryPage';
 import { useCursor } from './hooks/useCursor';
 import { ScrollToTop } from './components/ScrollToTop';
+import { LoadingScreen } from './components/LoadingScreen';
+import { PageTransition } from './components/PageTransition';
 
 export default function App() {
   const { dotRef, ringRef } = useCursor();
+  const [isLoading, setIsLoading] = useState(true);
 
   return (
     <>
-      <ScrollToTop />
-      <NavBar />
+      {/* Initial Loading Screen */}
+      <AnimatePresence>
+        {isLoading && (
+          <LoadingScreen onComplete={() => setIsLoading(false)} />
+        )}
+      </AnimatePresence>
 
+      {!isLoading && (
+        <>
+          <ScrollToTop />
+          <NavBar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/admin/*" element={<Admin />} />
-        <Route path="/gallery" element={<GalleryPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/inquiry" element={<InquiryPage />} />
-      </Routes>
+          <PageTransition>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/admin/*" element={<Admin />} />
+              <Route path="/gallery" element={<GalleryPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/inquiry" element={<InquiryPage />} />
+            </Routes>
+          </PageTransition>
 
-      {/* Global Cursor */}
-      <div ref={dotRef} className="cursor-dot hidden md:block" />
-      <div ref={ringRef} className="cursor-ring hidden md:block" />
+          {/* Global Cursor */}
+          <div ref={dotRef} className="cursor-dot hidden md:block" />
+          <div ref={ringRef} className="cursor-ring hidden md:block" />
+        </>
+      )}
     </>
   );
 }
