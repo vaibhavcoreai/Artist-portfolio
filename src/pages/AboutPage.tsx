@@ -59,7 +59,7 @@ export function AboutPage() {
     <main className="w-full bg-near-black text-warm-ivory min-h-screen pt-32 md:pt-48">
       
       {/* 1. Header Grid */}
-      <section className="container-luxury mb-32 md:mb-48 relative z-10">
+      <section className="container-luxury mb-48 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-32 items-end">
           
           <div className="flex flex-col space-y-6">
@@ -99,7 +99,7 @@ export function AboutPage() {
       </section>
 
       {/* 2. Parallax Image Break */}
-      <section className="w-full px-6 flex justify-center h-[50vh] md:h-[75vh] relative overflow-hidden mb-32 md:mb-48">
+      <section className="w-full px-6 flex justify-center h-[50vh] md:h-[75vh] relative overflow-hidden mt-32 md:mt-0 mb-48 md:mb-48">
         <motion.div 
           className="w-full max-w-2xl aspect-[4/5] md:aspect-[3/4] border border-white/5 relative bg-deep-charcoal rounded-[40px] overflow-hidden shadow-2xl"
         >
