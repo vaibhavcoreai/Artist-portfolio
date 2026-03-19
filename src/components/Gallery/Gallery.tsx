@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Artwork } from '../../lib/data';
 import { ArtworkCard } from './ArtworkCard';
@@ -79,7 +80,7 @@ export function Gallery() {
             }}
             className="columns-2 md:columns-2 lg:columns-3 gap-3 md:gap-4 [column-fill:_balance] mx-auto"
           >
-            {items.map((artwork) => (
+            {items.slice(0, 4).map((artwork) => (
               <div key={artwork.id} className="break-inside-avoid">
                 <ArtworkCard
                   artwork={artwork}
@@ -90,6 +91,21 @@ export function Gallery() {
               </div>
             ))}
           </motion.div>
+        )}
+
+        {items.length > 0 && (
+          <div className="flex justify-center mt-16">
+            <Link
+              to="/gallery"
+              className="group relative px-10 py-3.5 overflow-hidden rounded-full border border-aged-gold/20 hover:border-aged-gold/50 transition-all duration-500 hover:shadow-[0_0_20px_rgba(184,134,11,0.1)]"
+            >
+              <div className="absolute inset-0 bg-aged-gold/5 -translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+              <span className="relative font-sans text-[11px] tracking-[0.3em] uppercase text-warm-ivory/80 group-hover:text-warm-ivory flex items-center">
+                Open Gallery
+                <span className="ml-4 opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all">→</span>
+              </span>
+            </Link>
+          </div>
         )}
 
         {/* Overlays */}
