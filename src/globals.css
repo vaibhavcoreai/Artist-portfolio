@@ -1,0 +1,294 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   globals.css — Design System + Custom Cursor
+   Deepak Patil Fine Art Portfolio
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Jost:wght@100;200;300;400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS Custom Properties ─────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-near-black:     #080608;
+  --color-deep-charcoal:  #111014;
+  --color-warm-ivory:     #F2EDE4;
+  --color-aged-gold:      #B8956A;
+  --color-muted-bronze:   #7A5C3A;
+  --color-ghost-white:    #FAF8F5;
+  --color-gold-alpha:     rgba(184, 149, 106, 0.15);
+  --color-ivory-alpha:    rgba(242, 237, 228, 0.06);
+  --color-overlay-dark:   rgba(8, 6, 8, 0.72);
+
+  /* Typography */
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans:  "Jost", system-ui, sans-serif;
+
+  /* Type scale */
+  --text-display:  clamp(52px, 8vw, 96px);
+  --text-headline: clamp(32px, 5vw, 48px);
+  --text-title:    clamp(22px, 3vw, 32px);
+  --text-body:     16px;
+  --text-caption:  12px;
+  --text-nav:      13px;
+
+  /* Spacing (8px base) */
+  --space-xs:  8px;
+  --space-sm:  16px;
+  --space-md:  24px;
+  --space-lg:  32px;
+  --space-xl:  40px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 80px;
+  --space-5xl: 96px;
+  --space-6xl: 128px;
+
+  /* Motion */
+  --ease-luxury:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-entrance: cubic-bezier(0.0,  0.0,  0.2, 1.0);
+  --ease-exit:     cubic-bezier(0.4,  0.0,  1.0, 1.0);
+
+  --duration-fast:   0.2s;
+  --duration-normal: 0.5s;
+  --duration-slow:   0.8s;
+
+  /* Nav */
+  --nav-height: 76px;
+
+  /* Cursor */
+  cursor: none;
+}
+
+/* ─── Base Reset ─────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--color-near-black);
+  color: var(--color-warm-ivory);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: var(--text-body);
+  line-height: 1.7;
+  overflow-x: hidden;
+  cursor: none;
+  min-height: 100vh;
+}
+
+/* ─── Custom Cursor ─────────────────────────────────────────────────────────── */
+/* Custom Cursor Sizes */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-aged-gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 100001;
+  transform: translate(-50%, -50%);
+  transition: width var(--duration-fast) var(--ease-luxury),
+              height var(--duration-fast) var(--ease-luxury),
+              background-color var(--duration-fast) var(--ease-luxury),
+              opacity var(--duration-fast) var(--ease-luxury);
+  will-change: transform;
+}
+
+.cursor-dot.is-hovering {
+  opacity: 0;
+}
+
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(184, 149, 106, 0.35);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 100000;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s var(--ease-luxury),
+              height 0.3s var(--ease-luxury),
+              border-color 0.3s var(--ease-luxury),
+              background-color 0.3s var(--ease-luxury),
+              opacity 0.3s var(--ease-luxury);
+  will-change: transform;
+}
+
+.cursor-ring.is-hovering {
+  width: 48px;
+  height: 48px;
+  border-color: var(--color-aged-gold);
+  background-color: rgba(184, 149, 106, 0.1);
+}
+
+/* Hide cursor on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .cursor-dot, .cursor-ring {
+    display: none;
+  }
+
+  body {
+    cursor: auto;
+  }
+}
+
+/* ─── Selection ──────────────────────────────────────────────────────────────── */
+::selection {
+  background-color: var(--color-aged-gold);
+  color: var(--color-near-black);
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-near-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-muted-bronze);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-aged-gold);
+}
+
+/* ─── Typography Utilities ───────────────────────────────────────────────────── */
+.text-display {
+  font-family: var(--font-serif);
+  font-size: var(--text-display);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+}
+
+.text-headline {
+  font-family: var(--font-serif);
+  font-size: var(--text-headline);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.text-title {
+  font-family: var(--font-serif);
+  font-size: var(--text-title);
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+.text-body {
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.text-caption {
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.text-nav {
+  font-family: var(--font-sans);
+  font-size: var(--text-nav);
+  font-weight: 200;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ─── Layout Utilities ───────────────────────────────────────────────────────── */
+.container-luxury {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--space-3xl);
+}
+
+@media (max-width: 768px) {
+  .container-luxury {
+    padding: 0 var(--space-sm);
+  }
+}
+
+/* ─── Gold Divider ─────────────────────────────────────────────────────────── */
+.divider-gold {
+  width: 48px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-aged-gold), transparent);
+  margin: var(--space-md) 0;
+}
+
+/* ─── Hover Link Underline ─────────────────────────────────────────────────── */
+.link-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-aged-gold);
+  transition: width var(--duration-normal) var(--ease-luxury);
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}
+
+/* ─── Page Transition ────────────────────────────────────────────────────────── */
+.page-enter {
+  animation: pageEnter 0.8s var(--ease-entrance) forwards;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Section Spacing ────────────────────────────────────────────────────────── */
+.section {
+  padding: var(--space-6xl) 0;
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: var(--space-4xl) 0;
+  }
+}
