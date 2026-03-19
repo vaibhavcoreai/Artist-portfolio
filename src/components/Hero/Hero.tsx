@@ -1,8 +1,10 @@
 import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform, type Variants } from 'framer-motion';
 import { AntigravityCanvas } from './AntigravityCanvas';
 
 export function Hero() {
+  const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -116,7 +118,7 @@ export function Hero() {
           className="group relative flex items-center justify-center px-8 md:px-10 py-4 md:py-5 overflow-hidden rounded-full border border-white/10 hover:border-aged-gold/50 transition-colors duration-700 bg-white/[0.02] backdrop-blur-sm"
           data-cursor="hover"
           onClick={() => {
-            window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+            navigate('/gallery');
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-aged-gold/0 via-aged-gold/10 to-aged-gold/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]" />
