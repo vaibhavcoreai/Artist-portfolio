@@ -58,59 +58,64 @@ export function AboutPage() {
   return (
     <main className="w-full bg-near-black text-warm-ivory min-h-screen pt-32 md:pt-48">
       
-      {/* 1. Header Grid */}
-      <section className="container-luxury mb-48 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-32 items-end">
+      {/* 1 & 2. Unified Header & Portrait Grid */}
+      <section className="container-luxury mb-32 md:mb-48 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-0 items-start">
           
-          <div className="flex flex-col space-y-6">
-            <h1 className="text-5xl md:text-display italic leading-[1] md:leading-[0.9] text-warm-ivory">
-              Deepak Gurunath<br />Patil
-            </h1>
-          </div>
+          {/* Left Side: Name and Details */}
+          <div className="md:col-span-7 flex flex-col pt-0 md:pt-12">
+            
+            <div className="flex flex-col space-y-6 mb-16 md:mb-24">
+              <h1 className="text-5xl md:text-display italic leading-[1] md:leading-[0.9] text-warm-ivory">
+                Deepak Gurunath<br />Patil
+              </h1>
+            </div>
 
-          <div className="flex flex-col space-y-8 font-sans border-t border-aged-gold/30 pt-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 md:gap-8 text-[11px] uppercase tracking-widest text-ghost-white/70">
-              <div className="space-y-1.5 flex flex-col">
-                <span className="text-aged-gold text-[9px]">Date of Birth</span>
-                <span className="text-warm-ivory font-medium">4 September 1980</span>
-              </div>
-              <div className="space-y-1.5 flex flex-col">
-                <span className="text-aged-gold text-[9px]">Qualifications</span>
-                <span className="text-warm-ivory font-medium normal-case tracking-normal text-sm leading-relaxed">
-                  A.T.D., G.D.Art (ptg.),<br />Dip.A.Ed.
-                </span>
-              </div>
-              <div className="space-y-1.5 flex flex-col md:col-span-2">
-                <span className="text-aged-gold text-[9px]">Occupation</span>
-                <span className="text-warm-ivory font-medium normal-case tracking-normal text-sm leading-relaxed">
-                  Principal, Appasaheb Kadadi<br className="md:hidden" /> Chitrakala Mahavidyalaya, Solapur
-                </span>
-              </div>
-              <div className="space-y-1.5 flex flex-col md:col-span-2">
-                <span className="text-aged-gold text-[9px]">Contact</span>
-                <a href="mailto:deepak_patilart@rediffmail.com" className="text-warm-ivory font-medium normal-case tracking-normal hover:text-aged-gold transition tracking-widest text-xs truncate">
-                  deepak_patilart@rediffmail.com
-                </a>
+            <div className="flex flex-col space-y-8 font-sans border-t border-aged-gold/30 pt-10 max-w-xl">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 text-[11px] uppercase tracking-widest text-ghost-white/70">
+                <div className="space-y-2 flex flex-col">
+                  <span className="text-aged-gold text-[10px]">Date of Birth</span>
+                  <span className="text-warm-ivory font-medium">4 September 1980</span>
+                </div>
+                <div className="space-y-2 flex flex-col">
+                  <span className="text-aged-gold text-[10px]">Qualifications</span>
+                  <span className="text-warm-ivory font-medium normal-case tracking-normal text-sm leading-relaxed">
+                    A.T.D., G.D.Art (ptg.),<br />Dip.A.Ed.
+                  </span>
+                </div>
+                <div className="space-y-2 flex flex-col md:col-span-2">
+                  <span className="text-aged-gold text-[10px]">Occupation</span>
+                  <span className="text-warm-ivory font-medium normal-case tracking-normal text-sm leading-relaxed">
+                    Principal, Appasaheb Kadadi<br className="md:hidden" /> Chitrakala Mahavidyalaya, Solapur
+                  </span>
+                </div>
+                <div className="space-y-2 flex flex-col md:col-span-2">
+                  <span className="text-aged-gold text-[10px]">Contact</span>
+                  <a href="mailto:deepak_patilart@rediffmail.com" className="text-warm-ivory font-medium normal-case tracking-normal hover:text-aged-gold transition tracking-widest text-[13px] truncate">
+                    deepak_patilart@rediffmail.com
+                  </a>
+                </div>
               </div>
             </div>
+
+          </div>
+
+          {/* Right Side: Portrait Break */}
+          <div className="md:col-span-5 md:pl-12 w-full">
+            <motion.div 
+              className="w-full aspect-[4/5] md:aspect-[3/4] border border-white/5 relative bg-deep-charcoal rounded-[40px] overflow-hidden shadow-2xl"
+            >
+              <motion.img 
+                whileHover={{ scale: 1.1 }}
+                transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+                src={AboutImage} 
+                alt="Deepak Patil Artist" 
+                className="w-full h-full object-cover object-top grayscale opacity-80 mix-blend-lighten"
+              />
+            </motion.div>
           </div>
           
         </div>
-      </section>
-
-      {/* 2. Parallax Image Break */}
-      <section className="w-full px-6 flex justify-center h-[50vh] md:h-[75vh] relative overflow-hidden mt-32 md:mt-0 mb-48 md:mb-48">
-        <motion.div 
-          className="w-full max-w-2xl aspect-[4/5] md:aspect-[3/4] border border-white/5 relative bg-deep-charcoal rounded-[40px] overflow-hidden shadow-2xl"
-        >
-          <motion.img 
-            whileHover={{ scale: 1.15 }}
-            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-            src={AboutImage} 
-            alt="Deepak Patil Artist" 
-            className="w-full h-full object-cover object-top grayscale opacity-80 mix-blend-lighten"
-          />
-        </motion.div>
       </section>
 
       {/* 3. Deep Curriculum Vitae */}
