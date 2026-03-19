@@ -4,6 +4,7 @@ import { Home } from './pages/Home';
 import { Admin } from './pages/Admin';
 import { AboutPage } from './pages/AboutPage';
 import { GalleryPage } from './pages/GalleryPage';
+import { InquiryPage } from './pages/InquiryPage';
 import { useCursor } from './hooks/useCursor';
 
 export default function App() {
@@ -18,7 +19,7 @@ export default function App() {
         <Route path="/admin/*" element={<Admin />} />
         <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/about" element={<AboutPage />} />
-        <Route path="/inquiry" element={<div className="pt-32 text-center text-warm-ivory">Inquiry Placeholder</div>} />
+        <Route path="/inquiry" element={<InquiryPage />} />
       </Routes>
 
       {/* Global Cursor */}
