@@ -106,24 +106,29 @@ export function AdminArtworks() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.id) {
-      // Update
-      const { error } = await db.from('artworks').update(formData).eq('id', formData.id);
-      if (error) {
-        console.error('Update error:', error);
-        return;
+    setLoading(true);
+    
+    try {
+      if (formData.id) {
+        // Update
+        const { error } = await db.from('artworks').update(formData).eq('id', formData.id);
+        if (error) throw error;
+        alert('Artwork updated successfully!');
+      } else {
+        // Insert
+        const order = artworks.length > 0 ? Math.max(...artworks.map(a => a.display_order)) + 1 : 0;
+        const { error } = await db.from('artworks').insert([{ ...formData, display_order: order }]);
+        if (error) throw error;
+        alert('New artwork created successfully!');
       }
-    } else {
-      // Insert
-      const order = artworks.length > 0 ? Math.max(...artworks.map(a => a.display_order)) + 1 : 0;
-      const { error } = await db.from('artworks').insert([{ ...formData, display_order: order }]);
-      if (error) {
-        console.error('Insert error:', error);
-        return;
-      }
+      setIsModalOpen(false);
+      fetchArtworks();
+    } catch (err: any) {
+      console.error('Save error:', err);
+      alert(`Error saving artwork: ${err.message || 'Unknown error'}`);
+    } finally {
+      setLoading(false);
     }
-    setIsModalOpen(false);
-    fetchArtworks();
   };
 
   return (

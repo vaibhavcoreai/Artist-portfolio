@@ -12,6 +12,7 @@ export function GalleryPage() {
   const [visibleCount, setVisibleCount] = useState(6);
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
   const [inquiryArtwork, setInquiryArtwork] = useState<Artwork | null>(null);
+  const [fullScreenArtwork, setFullScreenArtwork] = useState<Artwork | null>(null);
   const { db } = useSupabase();
 
   const PAGE_SIZE = 6;
@@ -136,7 +137,7 @@ export function GalleryPage() {
                     transition: { staggerChildren: 0.1 }
                   }
                 }}
-                className="columns-1 md:columns-2 lg:columns-3 gap-4 [column-fill:_balance] mx-auto"
+                className="columns-2 lg:columns-3 gap-3 md:gap-4 [column-fill:_balance] mx-auto"
               >
                 {items.slice(0, visibleCount).map((artwork) => (
                   <div key={artwork.id} className="break-inside-avoid">
@@ -144,6 +145,7 @@ export function GalleryPage() {
                       artwork={artwork}
                       onClick={setSelectedArtwork}
                       onInquire={setInquiryArtwork}
+                      onFullscreen={setFullScreenArtwork}
                       isLightboxOpen={selectedArtwork?.id === artwork.id}
                     />
                   </div>
@@ -182,6 +184,33 @@ export function GalleryPage() {
               setInquiryArtwork(selectedArtwork);
             }}
           />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {fullScreenArtwork && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[110] bg-near-black flex items-center justify-center p-4"
+          >
+            <button
+              onClick={() => setFullScreenArtwork(null)}
+              className="absolute top-8 right-8 z-[120] w-12 h-12 flex items-center justify-center text-warm-ivory/50 hover:text-warm-ivory transition-colors"
+            >
+              <svg fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-8 h-8">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <motion.img
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              src={fullScreenArtwork.image_url}
+              alt={fullScreenArtwork.title}
+              className="max-w-full max-h-full object-contain shadow-2xl pointer-events-none"
+            />
+          </motion.div>
         )}
       </AnimatePresence>
 
