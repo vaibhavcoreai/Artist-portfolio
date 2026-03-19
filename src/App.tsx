@@ -6,13 +6,16 @@ import { AboutPage } from './pages/AboutPage';
 import { GalleryPage } from './pages/GalleryPage';
 import { InquiryPage } from './pages/InquiryPage';
 import { useCursor } from './hooks/useCursor';
+import { ScrollToTop } from './components/ScrollToTop';
 
 export default function App() {
   const { dotRef, ringRef } = useCursor();
 
   return (
     <>
+      <ScrollToTop />
       <NavBar />
+
 
       <Routes>
         <Route path="/" element={<Home />} />
