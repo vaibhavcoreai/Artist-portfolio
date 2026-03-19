@@ -145,7 +145,6 @@ export function GalleryPage() {
                       artwork={artwork}
                       onClick={setSelectedArtwork}
                       onInquire={setInquiryArtwork}
-                      onFullscreen={setFullScreenArtwork}
                       isLightboxOpen={selectedArtwork?.id === artwork.id}
                     />
                   </div>
@@ -183,6 +182,7 @@ export function GalleryPage() {
             onInquire={() => {
               setInquiryArtwork(selectedArtwork);
             }}
+            onFullscreen={setFullScreenArtwork}
           />
         )}
       </AnimatePresence>
@@ -193,7 +193,8 @@ export function GalleryPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[110] bg-near-black flex items-center justify-center p-4"
+            onClick={() => setFullScreenArtwork(null)}
+            className="fixed inset-0 z-[100000] bg-near-black flex items-center justify-center p-4 cursor-pointer"
           >
             <button
               onClick={() => setFullScreenArtwork(null)}

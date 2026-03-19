@@ -7,9 +7,10 @@ interface LightboxProps {
   artwork: Artwork;
   onClose: () => void;
   onInquire: () => void;
+  onFullscreen: (artwork: Artwork) => void;
 }
 
-export function Lightbox({ artwork, onClose, onInquire }: LightboxProps) {
+export function Lightbox({ artwork, onClose, onInquire, onFullscreen }: LightboxProps) {
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -78,6 +79,19 @@ export function Lightbox({ artwork, onClose, onInquire }: LightboxProps) {
           <p className="font-serif text-lg text-ghost-white/70 italic leading-relaxed mb-12">
             {artwork.description || 'A fleeting capture of light and atmosphere, rendered precisely yet emotionally to evoke a profound stillness.'}
           </p>
+
+          <button 
+            onClick={() => onFullscreen(artwork)}
+            data-cursor="hover"
+            className="group relative flex items-center justify-center py-5 px-8 overflow-hidden rounded-full border border-white/10 text-warm-ivory uppercase tracking-[0.3em] text-[10px] transition-all duration-700 w-full mb-4 bg-white/5 hover:bg-white/10"
+          >
+            <span className="relative z-10 flex items-center transition-colors duration-700 font-sans">
+              Take a Close Look
+              <svg fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-3.5 h-3.5 ml-4 transform group-hover:scale-110 transition-transform">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+              </svg>
+            </span>
+          </button>
 
           <button 
             onClick={onInquire}
