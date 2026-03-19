@@ -47,8 +47,8 @@ export function InquiryPanel({ isOpen, onClose, artwork }: InquiryPanelProps) {
               {/* Artwork Summary */}
               <div className="flex space-x-6 bg-near-black/40 p-6 rounded-[16px] border border-white/5">
                 <div className="w-20 h-24 bg-muted-bronze overflow-hidden shrink-0 rounded-sm">
-                  {artwork.image_url ? (
-                    <img src={artwork.image_url} alt={artwork.title} className="w-full h-full object-cover opacity-60" />
+                  {artwork.imageUrl ? (
+                    <img src={artwork.imageUrl} alt={artwork.title} className="w-full h-full object-cover opacity-60" />
                   ) : (
                     <div className="w-full h-full bg-aged-gold/20" />
                   )}

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { AdminArtworks } from '../components/Admin/AdminArtworks';
-import { AdminInquiries } from '../components/Admin/AdminInquiries';
 
 export function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -78,7 +77,7 @@ export function Admin() {
         </div>
         
         <nav className="flex flex-col space-y-4 flex-1">
-          {['Artworks', 'Inquiries', 'Settings'].map(tab => (
+          {['Artworks', 'Settings'].map(tab => (
             <NavLink
               key={tab}
               to={`/admin/${tab.toLowerCase()}`}
@@ -101,7 +100,6 @@ export function Admin() {
       <div className="flex-1 bg-near-black overflow-y-auto">
         <Routes>
           <Route path="artworks" element={<AdminArtworks />} />
-          <Route path="inquiries" element={<AdminInquiries />} />
           <Route path="settings" element={<div className="p-12 text-warm-ivory">Settings integration pending.</div>} />
         </Routes>
       </div>

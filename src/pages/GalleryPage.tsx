@@ -5,7 +5,8 @@ import { ArtworkCard } from '../components/Gallery/ArtworkCard';
 import { Lightbox } from '../components/Gallery/Lightbox';
 import { InquiryPanel } from '../components/Gallery/InquiryPanel';
 import { Footer } from '../components/Footer/Footer';
-import { useSupabase } from '../lib/supabase';
+import { useAppwrite } from '../lib/appwrite';
+import { Query } from 'appwrite';
 
 export function GalleryPage() {
   const [items, setItems] = useState<Artwork[]>([]);
@@ -13,7 +14,7 @@ export function GalleryPage() {
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
   const [inquiryArtwork, setInquiryArtwork] = useState<Artwork | null>(null);
   const [fullScreenArtwork, setFullScreenArtwork] = useState<Artwork | null>(null);
-  const { db } = useSupabase();
+  const { databases, config } = useAppwrite();
 
   const PAGE_SIZE = 6;
   const hasMore = visibleCount < items.length;
@@ -25,36 +26,34 @@ export function GalleryPage() {
   useEffect(() => {
     async function loadData() {
       try {
-        const { data, error } = await db
-          .from('artworks')
-          .select('*')
-          .eq('is_visible', true)
-          .order('display_order', { ascending: true });
+        const response = await databases.listDocuments(
+          config.databaseId,
+          config.collections.artworks,
+          [
+            Query.equal('isVisible', true),
+            Query.orderAsc('displayOrder')
+          ]
+        );
+        
+        const data = response.documents.map(doc => ({
+          id: doc.$id,
+          title: doc.title || 'Untitled',
+          medium: doc.medium || '',
+          year: doc.year || new Date().getFullYear(),
+          size: doc.sizeCm || '',
+          category: doc.category || '',
+          aspectRatio: 0.85,
+          imageUrl: doc.imageUrl || undefined,
+          description: doc.description || '',
+        } as Artwork));
 
-        if (error) {
-          console.error('Supabase fetch error:', error.message);
-          return;
-        }
-
-        if (data) {
-          setItems(data.map(d => ({
-            id: d.id,
-            title: d.title || 'Untitled',
-            medium: d.medium || '',
-            year: d.year || new Date().getFullYear(),
-            size: d.size_cm || '',
-            category: d.category || '',
-            aspectRatio: 0.85,
-            image_url: d.image_url || undefined,
-            description: d.description || '',
-          })));
-        }
+        setItems(data);
       } catch (err) {
-        console.error('Failed to load artworks:', err);
+        console.error('Failed to load artworks from Appwrite:', err);
       }
     }
     loadData();
-  }, [db]);
+  }, [databases, config]);
 
   return (
     <main className="w-full bg-near-black text-warm-ivory min-h-screen">
@@ -207,7 +206,7 @@ export function GalleryPage() {
             <motion.img
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              src={fullScreenArtwork.image_url}
+              src={fullScreenArtwork.imageUrl}
               alt={fullScreenArtwork.title}
               className="max-w-full max-h-full object-contain shadow-2xl pointer-events-none"
             />

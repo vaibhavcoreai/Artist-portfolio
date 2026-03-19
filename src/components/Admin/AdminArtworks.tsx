@@ -1,25 +1,24 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useSupabase } from '../../lib/supabase';
+import { useAppwrite } from '../../lib/appwrite';
+import { Query, ID } from 'appwrite';
 import { Reorder, motion } from 'framer-motion';
 import { useDropzone } from 'react-dropzone';
-import { v4 as uuidv4 } from 'uuid';
 
 interface ArtworkEntry {
   id: string;
   title: string;
   medium: string;
   year: number;
-  size_cm: string;
+  sizeCm: string;
   category: string;
   description: string;
-  image_url: string;
-  display_order: number;
-  is_visible: boolean;
-  is_featured: boolean;
+  imageUrl: string;
+  displayOrder: number;
+  isVisible: boolean;
 }
 
 export function AdminArtworks() {
-  const { db, storage } = useSupabase();
+  const { databases, storage, config } = useAppwrite();
   const [artworks, setArtworks] = useState<ArtworkEntry[]>([]);
   const [loading, setLoading] = useState(true);
   
@@ -30,9 +29,31 @@ export function AdminArtworks() {
 
   const fetchArtworks = async () => {
     setLoading(true);
-    const { data, error } = await db.from('artworks').select('*').order('display_order', { ascending: true });
-    if (!error && data) setArtworks(data);
-    setLoading(false);
+    try {
+      const response = await databases.listDocuments(
+        config.databaseId,
+        config.collections.artworks,
+        [Query.orderAsc('displayOrder')]
+      );
+      
+      const data = response.documents.map(doc => ({
+        id: doc.$id,
+        title: doc.title,
+        medium: doc.medium,
+        year: doc.year,
+        sizeCm: doc.sizeCm,
+        category: doc.category,
+        description: doc.description,
+        imageUrl: doc.imageUrl,
+        displayOrder: doc.displayOrder,
+        isVisible: doc.isVisible
+      })) as ArtworkEntry[];
+      setArtworks(data);
+    } catch (err) {
+      console.error('Error fetching artworks from Appwrite:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -42,31 +63,56 @@ export function AdminArtworks() {
   const handleReorder = async (newOrder: ArtworkEntry[]) => {
     setArtworks(newOrder); // Optimistic UI update
     
-    // Create batched updates for the new order sequence
-    for (let i = 0; i < newOrder.length; i++) {
-        // Run synchronously to ensure proper display_order mutation
-        await db.from('artworks').update({ display_order: i }).eq('id', newOrder[i].id);
+    try {
+      // Seqential updates for the new order sequence
+      for (let i = 0; i < newOrder.length; i++) {
+          await databases.updateDocument(
+              config.databaseId,
+              config.collections.artworks,
+              newOrder[i].id,
+              { displayOrder: i }
+          );
+      }
+    } catch (err) {
+      console.error('Error reordering artworks:', err);
     }
   };
 
   const handleToggleVisibility = async (e: React.MouseEvent, id: string, current: boolean) => {
     e.stopPropagation();
-    setArtworks(artworks.map(a => a.id === id ? { ...a, is_visible: !current } : a));
-    await db.from('artworks').update({ is_visible: !current }).eq('id', id);
+    try {
+      setArtworks(artworks.map(a => a.id === id ? { ...a, isVisible: !current } : a));
+      await databases.updateDocument(
+          config.databaseId,
+          config.collections.artworks,
+          id,
+          { isVisible: !current }
+      );
+    } catch (err) {
+       console.error('Error toggling visibility:', err);
+    }
   };
 
   const handleDelete = async (id: string, title: string) => {
     if (window.confirm(`Are you sure you want to permanently delete "${title}"?`)) {
-      setArtworks(artworks.filter(a => a.id !== id));
-      await db.from('artworks').delete().eq('id', id);
+      try {
+        setArtworks(artworks.filter(a => a.id !== id));
+        await databases.deleteDocument(
+            config.databaseId,
+            config.collections.artworks,
+            id
+        );
+      } catch (err) {
+        console.error('Error deleting artwork:', err);
+      }
     }
   };
 
   const openModal = (artwork?: ArtworkEntry) => {
     setFormData(artwork || { 
       title: '', medium: '', year: new Date().getFullYear(), 
-      size_cm: '', category: '', description: '', image_url: '', 
-      is_visible: true, is_featured: false 
+      sizeCm: '', category: '', description: '', imageUrl: '', 
+      isVisible: true
     });
     setUploadProgress(0);
     setIsModalOpen(true);
@@ -76,27 +122,29 @@ export function AdminArtworks() {
     const file = acceptedFiles[0];
     if (!file) return;
 
-    setUploadProgress(10);
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${uuidv4()}.${fileExt}`;
-
-    const { data, error } = await storage.upload(`uploads/${fileName}`, file, {
-      cacheControl: '3600',
-      upsert: false
-    });
+    setUploadProgress(5);
     
-    if (error) {
-      console.error('Upload failed:', error.message);
-      setUploadProgress(0);
-      return;
-    }
-    
-    if (data) {
+    try {
+      const response = await storage.createFile(
+          config.bucketId,
+          ID.unique(),
+          file
+      );
+      
       setUploadProgress(100);
-      const { data: publicData } = storage.getPublicUrl(data.path);
-      setFormData(prev => ({ ...prev, image_url: publicData.publicUrl }));
+      
+      // Construct public view URL for the file
+      const endpoint = (storage as any).client.config.endpoint;
+      const project = (storage as any).client.config.project;
+      const downloadURL = `${endpoint}/storage/buckets/${config.bucketId}/files/${response.$id}/view?project=${project}`;
+      
+      setFormData(prev => ({ ...prev, imageUrl: downloadURL }));
+    } catch (err) {
+      console.error('Upload failed:', err);
+      setUploadProgress(0);
+      alert('Image upload failed. Check bucket permissions.');
     }
-  }, [storage]);
+  }, [storage, config]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ 
     onDrop, 
@@ -111,14 +159,26 @@ export function AdminArtworks() {
     try {
       if (formData.id) {
         // Update
-        const { error } = await db.from('artworks').update(formData).eq('id', formData.id);
-        if (error) throw error;
+        const { id, ...dataToUpdate } = formData;
+        await databases.updateDocument(
+            config.databaseId,
+            config.collections.artworks,
+            id!,
+            dataToUpdate
+        );
         alert('Artwork updated successfully!');
       } else {
         // Insert
-        const order = artworks.length > 0 ? Math.max(...artworks.map(a => a.display_order)) + 1 : 0;
-        const { error } = await db.from('artworks').insert([{ ...formData, display_order: order }]);
-        if (error) throw error;
+        const order = artworks.length > 0 ? Math.max(...artworks.map(a => a.displayOrder)) + 1 : 0;
+        await databases.createDocument(
+            config.databaseId,
+            config.collections.artworks,
+            ID.unique(),
+            {
+                ...formData,
+                displayOrder: order
+            }
+        );
         alert('New artwork created successfully!');
       }
       setIsModalOpen(false);
@@ -144,7 +204,7 @@ export function AdminArtworks() {
       </div>
 
       {loading ? (
-        <div className="text-white">Loading database...</div>
+        <div className="text-white">Loading database (Appwrite)...</div>
       ) : (
         <div className="bg-deep-charcoal border border-white/5 rounded-sm p-4 h-full">
           <div className="grid grid-cols-12 gap-4 pb-4 border-b border-white/5 text-[10px] uppercase tracking-widest text-ghost-white/50 mb-4 px-4">
@@ -164,8 +224,8 @@ export function AdminArtworks() {
                 className="grid grid-cols-12 gap-4 items-center bg-near-black p-4 border border-white/5 cursor-grab active:cursor-grabbing hover:bg-white/5 transition-colors"
               >
                 <div className="col-span-1">
-                  {artwork.image_url ? (
-                    <img src={artwork.image_url} alt="" className="w-12 h-12 object-cover" />
+                  {artwork.imageUrl ? (
+                    <img src={artwork.imageUrl} alt="" className="w-12 h-12 object-cover" />
                   ) : (
                     <div className="w-12 h-12 bg-white/5 border border-white/10" />
                   )}
@@ -175,10 +235,10 @@ export function AdminArtworks() {
                 <div className="col-span-1 text-xs text-aged-gold">{artwork.year}</div>
                 <div className="col-span-2">
                   <button 
-                    onClick={(e) => handleToggleVisibility(e, artwork.id, artwork.is_visible)}
-                    className={`text-[10px] px-3 py-1 uppercase tracking-widest border ${artwork.is_visible ? 'border-green-500/50 text-green-400' : 'border-red-500/50 text-red-400'}`}
+                    onClick={(e) => handleToggleVisibility(e, artwork.id, artwork.isVisible)}
+                    className={`text-[10px] px-3 py-1 uppercase tracking-widest border ${artwork.isVisible ? 'border-green-500/50 text-green-400' : 'border-red-500/50 text-red-400'}`}
                   >
-                    {artwork.is_visible ? 'Visible' : 'Hidden'}
+                    {artwork.isVisible ? 'Visible' : 'Hidden'}
                   </button>
                 </div>
                 <div className="col-span-2 flex justify-end space-x-4">
@@ -239,7 +299,7 @@ export function AdminArtworks() {
                 </div>
                 <div>
                   <label className="text-[10px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Size</label>
-                  <input required type="text" value={formData.size_cm || ''} onChange={e => setFormData({ ...formData, size_cm: e.target.value })} className="w-full bg-near-black border border-white/10 p-3 text-sm text-warm-ivory focus:border-aged-gold outline-none" placeholder="e.g. 90x120cm" />
+                  <input required type="text" value={formData.sizeCm || ''} onChange={e => setFormData({ ...formData, sizeCm: e.target.value })} className="w-full bg-near-black border border-white/10 p-3 text-sm text-warm-ivory focus:border-aged-gold outline-none" placeholder="e.g. 90x120cm" />
                 </div>
               </div>
 
@@ -247,8 +307,8 @@ export function AdminArtworks() {
                 <label className="text-[10px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Image Upload</label>
                 <div {...getRootProps()} className={`w-full border-2 border-dashed p-8 text-center cursor-pointer transition-colors ${isDragActive ? 'border-aged-gold bg-aged-gold/5' : 'border-white/10 bg-near-black hover:border-white/30'}`}>
                   <input {...getInputProps()} />
-                  {formData.image_url ? (
-                    <img src={formData.image_url} alt="Preview" className="h-32 mx-auto object-contain" />
+                  {formData.imageUrl ? (
+                    <img src={formData.imageUrl} alt="Preview" className="h-32 mx-auto object-contain" />
                   ) : (
                     <p className="text-sm text-ghost-white/50">Drag 'n' drop an image here, or click to select</p>
                   )}

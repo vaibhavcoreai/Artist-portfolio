@@ -8,7 +8,7 @@ export interface Artwork {
   size: string;
   category: string;
   aspectRatio: number;
-  image_url?: string;
+  imageUrl?: string;
   description?: string;
 }
 
