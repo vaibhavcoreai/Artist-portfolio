@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '../../lib/supabase';
+import { useSupabase } from '../../lib/supabase';
 import { Reorder, motion } from 'framer-motion';
 import { useDropzone } from 'react-dropzone';
 import { v4 as uuidv4 } from 'uuid';
 
 interface ArtworkEntry {
-  id?: string;
+  id: string;
   title: string;
   medium: string;
   year: number;
@@ -15,9 +15,11 @@ interface ArtworkEntry {
   image_url: string;
   display_order: number;
   is_visible: boolean;
+  is_featured: boolean;
 }
 
 export function AdminArtworks() {
+  const { db, storage } = useSupabase();
   const [artworks, setArtworks] = useState<ArtworkEntry[]>([]);
   const [loading, setLoading] = useState(true);
   
@@ -28,22 +30,9 @@ export function AdminArtworks() {
 
   const fetchArtworks = async () => {
     setLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from('artworks')
-        .select('*')
-        .order('display_order', { ascending: true });
-        
-      if (!error && data) {
-        setArtworks(data as ArtworkEntry[]);
-      } else if (error) {
-         console.error('Error fetching artworks from Supabase:', error);
-      }
-    } catch (err) {
-      console.error('Error fetching artworks from Supabase:', err);
-    } finally {
-      setLoading(false);
-    }
+    const { data, error } = await db.from('artworks').select('*').order('display_order', { ascending: true });
+    if (!error && data) setArtworks(data);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -53,44 +42,23 @@ export function AdminArtworks() {
   const handleReorder = async (newOrder: ArtworkEntry[]) => {
     setArtworks(newOrder); // Optimistic UI update
     
-    try {
-      for (let i = 0; i < newOrder.length; i++) {
-        await supabase
-          .from('artworks')
-          .update({ display_order: i })
-          .eq('id', newOrder[i].id);
-      }
-    } catch (err) {
-      console.error('Error reordering artworks:', err);
+    // Create batched updates for the new order sequence
+    for (let i = 0; i < newOrder.length; i++) {
+        // Run synchronously to ensure proper display_order mutation
+        await db.from('artworks').update({ display_order: i }).eq('id', newOrder[i].id);
     }
   };
 
-  const handleToggleVisibility = async (e: React.MouseEvent, id: string | undefined, current: boolean) => {
+  const handleToggleVisibility = async (e: React.MouseEvent, id: string, current: boolean) => {
     e.stopPropagation();
-    if (!id) return;
-    try {
-      setArtworks(artworks.map(a => a.id === id ? { ...a, is_visible: !current } : a));
-      await supabase
-        .from('artworks')
-        .update({ is_visible: !current })
-        .eq('id', id);
-    } catch (err) {
-       console.error('Error toggling visibility:', err);
-    }
+    setArtworks(artworks.map(a => a.id === id ? { ...a, is_visible: !current } : a));
+    await db.from('artworks').update({ is_visible: !current }).eq('id', id);
   };
 
-  const handleDelete = async (id: string | undefined, title: string) => {
-    if (!id) return;
+  const handleDelete = async (id: string, title: string) => {
     if (window.confirm(`Are you sure you want to permanently delete "${title}"?`)) {
-      try {
-        setArtworks(artworks.filter(a => a.id !== id));
-        await supabase
-          .from('artworks')
-          .delete()
-          .eq('id', id);
-      } catch (err) {
-        console.error('Error deleting artwork:', err);
-      }
+      setArtworks(artworks.filter(a => a.id !== id));
+      await db.from('artworks').delete().eq('id', id);
     }
   };
 
@@ -98,7 +66,7 @@ export function AdminArtworks() {
     setFormData(artwork || { 
       title: '', medium: '', year: new Date().getFullYear(), 
       size_cm: '', category: '', description: '', image_url: '', 
-      is_visible: true
+      is_visible: true, is_featured: false 
     });
     setUploadProgress(0);
     setIsModalOpen(true);
@@ -112,28 +80,23 @@ export function AdminArtworks() {
     const fileExt = file.name.split('.').pop();
     const fileName = `${uuidv4()}.${fileExt}`;
 
-    try {
-      const { data, error } = await supabase.storage
-        .from('artwork-images')
-        .upload(`uploads/${fileName}`, file, { cacheControl: '3600', upsert: false });
-      
-      if (error) {
-        console.error('Upload failed:', error.message);
-        setUploadProgress(0);
-        return;
-      }
-      
-      if (data) {
-        setUploadProgress(100);
-        const { data: publicData } = supabase.storage.from('artwork-images').getPublicUrl(data.path);
-        setFormData(prev => ({ ...prev, image_url: publicData.publicUrl }));
-      }
-    } catch (err) {
-      console.error('Upload failed:', err);
+    const { data, error } = await storage.upload(`uploads/${fileName}`, file, {
+      cacheControl: '3600',
+      upsert: false
+    });
+    
+    if (error) {
+      console.error('Upload failed:', error.message);
       setUploadProgress(0);
-      alert('Image upload failed. Check bucket permissions.');
+      return;
     }
-  }, []);
+    
+    if (data) {
+      setUploadProgress(100);
+      const { data: publicData } = storage.getPublicUrl(data.path);
+      setFormData(prev => ({ ...prev, image_url: publicData.publicUrl }));
+    }
+  }, [storage]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ 
     onDrop, 
@@ -143,36 +106,24 @@ export function AdminArtworks() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    
-    try {
-      if (formData.id) {
-        // Update
-        const { error } = await supabase
-          .from('artworks')
-          .update(formData)
-          .eq('id', formData.id);
-
-        if (error) throw error;
-        alert('Artwork updated successfully!');
-      } else {
-        // Insert
-        const order = artworks.length > 0 ? Math.max(...artworks.map(a => a.display_order)) + 1 : 0;
-        const { error } = await supabase
-          .from('artworks')
-          .insert([{ ...formData, display_order: order }]);
-
-        if (error) throw error;
-        alert('New artwork created successfully!');
+    if (formData.id) {
+      // Update
+      const { error } = await db.from('artworks').update(formData).eq('id', formData.id);
+      if (error) {
+        console.error('Update error:', error);
+        return;
       }
-      setIsModalOpen(false);
-      fetchArtworks();
-    } catch (err: any) {
-      console.error('Save error:', err);
-      alert(`Error saving artwork: ${err.message || 'Unknown error'}`);
-    } finally {
-      setLoading(false);
+    } else {
+      // Insert
+      const order = artworks.length > 0 ? Math.max(...artworks.map(a => a.display_order)) + 1 : 0;
+      const { error } = await db.from('artworks').insert([{ ...formData, display_order: order }]);
+      if (error) {
+        console.error('Insert error:', error);
+        return;
+      }
     }
+    setIsModalOpen(false);
+    fetchArtworks();
   };
 
   return (
@@ -188,7 +139,7 @@ export function AdminArtworks() {
       </div>
 
       {loading ? (
-        <div className="text-white">Loading database (Supabase)...</div>
+        <div className="text-white">Loading database...</div>
       ) : (
         <div className="bg-deep-charcoal border border-white/5 rounded-sm p-4 h-full">
           <div className="grid grid-cols-12 gap-4 pb-4 border-b border-white/5 text-[10px] uppercase tracking-widest text-ghost-white/50 mb-4 px-4">
@@ -203,7 +154,7 @@ export function AdminArtworks() {
           <Reorder.Group axis="y" values={artworks} onReorder={handleReorder} className="flex flex-col space-y-2">
             {artworks.map((artwork) => (
               <Reorder.Item 
-                key={artwork.id!} 
+                key={artwork.id} 
                 value={artwork}
                 className="grid grid-cols-12 gap-4 items-center bg-near-black p-4 border border-white/5 cursor-grab active:cursor-grabbing hover:bg-white/5 transition-colors"
               >

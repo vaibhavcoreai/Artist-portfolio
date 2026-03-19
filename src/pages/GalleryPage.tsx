@@ -5,8 +5,7 @@ import { ArtworkCard } from '../components/Gallery/ArtworkCard';
 import { Lightbox } from '../components/Gallery/Lightbox';
 import { InquiryPanel } from '../components/Gallery/InquiryPanel';
 import { Footer } from '../components/Footer/Footer';
-import { useAppwrite } from '../lib/appwrite';
-import { Query } from 'appwrite';
+import { supabase } from '../lib/supabase';
 
 export function GalleryPage() {
   const [items, setItems] = useState<Artwork[]>([]);
@@ -14,7 +13,6 @@ export function GalleryPage() {
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
   const [inquiryArtwork, setInquiryArtwork] = useState<Artwork | null>(null);
   const [fullScreenArtwork, setFullScreenArtwork] = useState<Artwork | null>(null);
-  const { databases, config } = useAppwrite();
 
   const PAGE_SIZE = 6;
   const hasMore = visibleCount < items.length;
@@ -26,34 +24,38 @@ export function GalleryPage() {
   useEffect(() => {
     async function loadData() {
       try {
-        const response = await databases.listDocuments(
-          config.databaseId,
-          config.collections.artworks,
-          [
-            Query.equal('isVisible', true),
-            Query.orderAsc('displayOrder')
-          ]
-        );
-        
-        const data = response.documents.map(doc => ({
-          id: doc.$id,
-          title: doc.title || 'Untitled',
-          medium: doc.medium || '',
-          year: doc.year || new Date().getFullYear(),
-          size: doc.sizeCm || '',
-          category: doc.category || '',
-          aspectRatio: 0.85,
-          imageUrl: doc.imageUrl || undefined,
-          description: doc.description || '',
-        } as Artwork));
+        const { data, error } = await supabase
+          .from('artworks')
+          .select('*')
+          .eq('is_visible', true)
+          .order('display_order', { ascending: true });
 
-        setItems(data);
+        if (error) {
+          console.error('Failed to load artworks from Supabase:', error.message);
+          return;
+        }
+        
+        if (data) {
+          const mappedData = data.map((doc: any) => ({
+            id: doc.id,
+            title: doc.title || 'Untitled',
+            medium: doc.medium || '',
+            year: doc.year || new Date().getFullYear(),
+            size: doc.size_cm || '',
+            category: doc.category || '',
+            aspectRatio: 0.85,
+            imageUrl: doc.image_url || undefined,
+            description: doc.description || '',
+          } as Artwork));
+
+          setItems(mappedData);
+        }
       } catch (err) {
-        console.error('Failed to load artworks from Appwrite:', err);
+        console.error('Failed to load artworks:', err);
       }
     }
     loadData();
-  }, [databases, config]);
+  }, []);
 
   return (
     <main className="w-full bg-near-black text-warm-ivory min-h-screen">
@@ -108,7 +110,7 @@ export function GalleryPage() {
             <div className="w-px h-10 bg-white/10" />
             <div className="flex flex-col">
               <span className="font-serif text-3xl italic text-aged-gold">
-                {Math.min(...items.map(i => i.year))}—{Math.max(...items.map(i => i.year))}
+                {items.length > 0 ? `${Math.min(...items.map(i => i.year))}—${Math.max(...items.map(i => i.year))}` : '—'}
               </span>
               <span className="font-sans text-[10px] tracking-[0.2em] uppercase text-ghost-white/40 mt-1">Period</span>
             </div>
