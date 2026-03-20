@@ -6,6 +6,7 @@ import { Lightbox } from '../components/Gallery/Lightbox';
 import { InquiryPanel } from '../components/Gallery/InquiryPanel';
 import { Footer } from '../components/Footer/Footer';
 import { supabase } from '../lib/supabase';
+import GalleryHeroCollage from '../assets/gallery-hero-collage.jpg';
 
 export function GalleryPage() {
   const [items, setItems] = useState<Artwork[]>([]);
@@ -147,7 +148,7 @@ export function GalleryPage() {
 
               <div className="relative w-[420px] h-[620px] overflow-hidden rounded-[3rem] border border-white/5 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.8)] transition-all duration-700 group-hover:shadow-[0_48px_80px_-16px_rgba(184,149,106,0.15)] group-hover:border-white/10">
                 <img
-                  src="/src/assets/gallery-hero-collage.jpg"
+                  src={GalleryHeroCollage}
                   alt="Gallery Collection Collage"
                   className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-[4s] ease-out group-hover:scale-105"
                 />
