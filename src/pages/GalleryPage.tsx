@@ -30,7 +30,7 @@ export function GalleryPage() {
           console.error('Failed to load artworks from Supabase:', error.message);
           return;
         }
-        
+
         if (data) {
           const mappedData = data.map((doc: any) => ({
             id: doc.id,
@@ -67,75 +67,97 @@ export function GalleryPage() {
         </div>
 
         <div className="max-w-[1600px] mx-auto relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
-          >
-            <p className="font-sans text-[10px] tracking-[0.3em] uppercase text-aged-gold mb-6">
-              Complete Collection
-            </p>
-            <h1 className="text-display italic leading-[0.9] text-warm-ivory mb-8">
-              Gallery
-            </h1>
-            <p className="font-sans text-sm font-light text-ghost-white/50 max-w-lg leading-relaxed">
-              A curated selection of original paintings spanning watercolour, charcoal, 
-              and mixed media — each piece a meditation 
-              on light, memory, and the quiet poetry of the everyday.
-            </p>
-
-            {/* Scroll Indicator */}
+          <div className="flex flex-col lg:flex-row lg:items-center justify-start gap-12 lg:gap-64">
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.5, duration: 1 }}
-              className="mt-12 flex items-center space-x-4 group cursor-pointer"
-              onClick={() => {
-                window.scrollTo({
-                  top: window.innerHeight * 0.8,
-                  behavior: 'smooth'
-                });
-              }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="max-w-xl shrink-0"
             >
-              <div className="w-px h-12 bg-gradient-to-b from-aged-gold/50 to-transparent relative overflow-hidden">
-                <motion.div 
-                  animate={{ y: [0, 48] }}
-                  transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                  className="absolute top-0 left-0 w-full h-1/2 bg-aged-gold shadow-[0_0_10px_rgba(184,134,11,0.5)]"
-                />
-              </div>
-              <span className="font-sans text-xs uppercase tracking-[0.3em] text-warm-ivory/70 group-hover:text-aged-gold transition-colors">
-                Explore Collection
-              </span>
-            </motion.div>
-          </motion.div>
+              <p className="font-sans text-[10px] tracking-[0.3em] uppercase text-aged-gold mb-6">
+                Complete Collection
+              </p>
+              <h1 className="text-display italic leading-[0.9] text-warm-ivory mb-8">
+                Gallery
+              </h1>
+              <p className="font-sans text-sm font-light text-ghost-white/50 max-w-lg leading-relaxed">
+                A curated selection of original paintings spanning watercolour, charcoal,
+                and mixed media — each piece a meditation
+                on light, memory, and the quiet poetry of the everyday.
+              </p>
 
-          {/* Stats bar */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-            className="flex items-center space-x-12 mt-16 pt-8 border-t border-white/5"
-          >
-            <div className="flex flex-col">
-              <span className="font-serif text-3xl italic text-aged-gold">{items.length}</span>
-              <span className="font-sans text-[10px] tracking-[0.2em] uppercase text-ghost-white/40 mt-1">Works</span>
-            </div>
-            <div className="w-px h-10 bg-white/10" />
-            <div className="flex flex-col">
-              <span className="font-serif text-3xl italic text-aged-gold">
-                {new Set(items.map(i => i.category)).size}
-              </span>
-              <span className="font-sans text-[10px] tracking-[0.2em] uppercase text-ghost-white/40 mt-1">Mediums</span>
-            </div>
-            <div className="w-px h-10 bg-white/10" />
-            <div className="flex flex-col">
-              <span className="font-serif text-3xl italic text-aged-gold">
-                {items.length > 0 ? `${Math.min(...items.map(i => i.year))}—${Math.max(...items.map(i => i.year))}` : '—'}
-              </span>
-              <span className="font-sans text-[10px] tracking-[0.2em] uppercase text-ghost-white/40 mt-1">Period</span>
-            </div>
-          </motion.div>
+              {/* Scroll Indicator */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.5, duration: 1 }}
+                className="mt-12 flex items-center space-x-4 group cursor-pointer"
+                onClick={() => {
+                  window.scrollTo({
+                    top: window.innerHeight * 0.8,
+                    behavior: 'smooth'
+                  });
+                }}
+              >
+                <div className="w-px h-12 bg-gradient-to-b from-aged-gold/50 to-transparent relative overflow-hidden">
+                  <motion.div
+                    animate={{ y: [0, 48] }}
+                    transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                    className="absolute top-0 left-0 w-full h-1/2 bg-aged-gold shadow-[0_0_10px_rgba(184,134,11,0.5)]"
+                  />
+                </div>
+                <span className="font-sans text-xs uppercase tracking-[0.3em] text-warm-ivory/70 group-hover:text-aged-gold transition-colors">
+                  Explore Collection
+                </span>
+              </motion.div>
+
+              {/* Stats bar - Integrated */}
+              <div className="flex items-center space-x-8 mt-10 pt-6 border-t border-white/5 max-w-sm">
+                <div className="flex flex-col min-w-[60px]">
+                  <span className="font-serif text-2xl italic text-aged-gold leading-none">{items.length}</span>
+                  <span className="font-sans text-[10px] tracking-[0.15em] uppercase text-ghost-white/40 mt-1">Works</span>
+                </div>
+                <div className="w-px h-6 bg-white/10" />
+                <div className="flex flex-col min-w-[70px]">
+                  <span className="font-serif text-2xl italic text-aged-gold leading-none">
+                    {new Set(items.map(i => i.category)).size}
+                  </span>
+                  <span className="font-sans text-[10px] tracking-[0.15em] uppercase text-ghost-white/40 mt-1">Mediums</span>
+                </div>
+                <div className="w-px h-6 bg-white/10" />
+                <div className="flex flex-col">
+                  <span className="font-serif text-2xl italic text-aged-gold leading-none">
+                    {items.length > 0 ? `${Math.min(...items.map(i => i.year))}—${Math.max(...items.map(i => i.year))}` : '—'}
+                  </span>
+                  <span className="font-sans text-[10px] tracking-[0.15em] uppercase text-ghost-white/40 mt-1">Period</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Hero Image - Desktop Only */}
+            <motion.div
+              initial={{ opacity: 0, x: 60, rotate: 2 }}
+              animate={{ opacity: 1, x: 0, rotate: 0 }}
+              transition={{ duration: 1.4, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="hidden lg:block relative group"
+            >
+              {/* Decorative accent */}
+              <div className="absolute -top-6 -right-6 w-32 h-32 border-t border-r border-aged-gold/20 rounded-tr-[3rem]" />
+              <div className="absolute -bottom-6 -left-6 w-32 h-32 border-b border-l border-aged-gold/20 rounded-bl-[3rem]" />
+
+              <div className="relative w-[420px] h-[620px] overflow-hidden rounded-[3rem] border border-white/5 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.8)] transition-all duration-700 group-hover:shadow-[0_48px_80px_-16px_rgba(184,149,106,0.15)] group-hover:border-white/10">
+                <img
+                  src="/src/assets/gallery-hero-collage.jpg"
+                  alt="Gallery Collection Collage"
+                  className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-[4s] ease-out group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-near-black/60 via-transparent to-transparent opacity-40" />
+
+                {/* Subtle glass reflection effect on hover */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -179,7 +201,7 @@ export function GalleryPage() {
 
               {/* Pagination & Navigation */}
               <div className="flex flex-col items-center mt-24 space-y-12">
-                
+
                 {/* Current Page Status */}
                 <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-aged-gold/40">
                   Page {currentPage} of {totalPages}
@@ -187,7 +209,7 @@ export function GalleryPage() {
 
                 <div className="flex items-center space-x-2 md:space-x-10">
                   {/* Prev Button */}
-                  <button 
+                  <button
                     onClick={() => {
                       setCurrentPage(prev => Math.max(1, prev - 1));
                       window.scrollTo({ top: 300, behavior: 'smooth' });
@@ -212,14 +234,13 @@ export function GalleryPage() {
                           setCurrentPage(num);
                           window.scrollTo({ top: 300, behavior: 'smooth' });
                         }}
-                        className={`w-10 h-10 md:w-12 md:h-12 rounded-full font-serif italic text-base md:text-xl transition-all duration-500 relative flex items-center justify-center ${
-                          currentPage === num 
-                            ? 'text-aged-gold shadow-[0_0_30px_rgba(184,134,11,0.2)]' 
+                        className={`w-10 h-10 md:w-12 md:h-12 rounded-full font-serif italic text-base md:text-xl transition-all duration-500 relative flex items-center justify-center ${currentPage === num
+                            ? 'text-aged-gold shadow-[0_0_30px_rgba(184,134,11,0.2)]'
                             : 'text-warm-ivory/30 hover:text-warm-ivory hover:bg-white/5'
-                        }`}
+                          }`}
                       >
                         {currentPage === num && (
-                          <motion.div 
+                          <motion.div
                             layoutId="activePage"
                             className="absolute inset-0 border border-aged-gold/50 rounded-full"
                           />
@@ -230,7 +251,7 @@ export function GalleryPage() {
                   </div>
 
                   {/* Next Button */}
-                  <button 
+                  <button
                     onClick={() => {
                       setCurrentPage(prev => Math.min(totalPages, prev + 1));
                       window.scrollTo({ top: 300, behavior: 'smooth' });
