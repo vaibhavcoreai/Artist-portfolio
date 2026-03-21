@@ -25,7 +25,7 @@ export function MagneticButton({ children, onClick }: { children: React.ReactNod
       onMouseLeave={handleMouseLeave}
       animate={{ x: position.x, y: position.y }}
       transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
-      className="relative px-8 py-5 border border-aged-gold/50 text-warm-ivory uppercase font-sans text-xs tracking-widest overflow-hidden group hover:border-aged-gold"
+      className="relative px-8 py-5 border border-aged-gold/50 text-warm-ivory uppercase font-sans text-base tracking-widest overflow-hidden group hover:border-aged-gold"
       data-cursor="hover"
       onClick={() => {
         if (onClick) {

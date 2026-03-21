@@ -32,7 +32,7 @@ export function About() {
 
         {/* Right: Content */}
         <div className="w-full md:w-1/2 flex flex-col items-start z-10">
-          <p className="font-sans text-[10px] tracking-[0.3em] uppercase text-aged-gold mb-6">
+          <p className="font-sans text-[16px] tracking-[0.3em] uppercase text-aged-gold mb-6">
             The Artist
           </p>
           <h2 className="text-display text-warm-ivory italic leading-none mb-10">
@@ -53,10 +53,10 @@ export function About() {
             data-cursor="hover"
             className="group relative inline-flex items-center space-x-6 pb-4 border-b border-white/10 hover:border-aged-gold transition-colors"
           >
-            <span className="font-sans text-[11px] tracking-[0.2em] uppercase text-warm-ivory group-hover:text-aged-gold transition-colors">
+            <span className="font-sans text-[15px] tracking-[0.2em] uppercase text-warm-ivory group-hover:text-aged-gold transition-colors">
               Read Full Biography & CV
             </span>
-            <span className="text-aged-gold font-sans text-xs group-hover:translate-x-2 transition-transform">
+            <span className="text-aged-gold font-sans text-base group-hover:translate-x-2 transition-transform">
               →
             </span>
           </NavLink>

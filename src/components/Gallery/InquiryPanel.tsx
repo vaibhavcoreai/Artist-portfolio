@@ -55,14 +55,14 @@ export function InquiryPanel({ isOpen, onClose, artwork }: InquiryPanelProps) {
                 </div>
                 <div>
                   <h3 className="font-serif text-xl text-warm-ivory mb-2">{artwork.title}</h3>
-                  <p className="font-sans text-[11px] tracking-widest uppercase text-ghost-white/50">{artwork.medium}</p>
-                  <p className="font-sans text-[11px] tracking-widest uppercase text-ghost-white/50 mt-1">{artwork.size}</p>
+                  <p className="font-sans text-[15px] tracking-widest uppercase text-ghost-white/50">{artwork.medium}</p>
+                  <p className="font-sans text-[15px] tracking-widest uppercase text-ghost-white/50 mt-1">{artwork.size}</p>
                 </div>
               </div>
 
               <div className="flex flex-col space-y-6">
                 <div>
-                  <h4 className="font-sans text-[10px] uppercase tracking-[0.3em] text-aged-gold mb-8 text-center">— Inquire Directly —</h4>
+                  <h4 className="font-sans text-[16px] uppercase tracking-[0.3em] text-aged-gold mb-8 text-center">— Inquire Directly —</h4>
                   
                   <div className="space-y-4">
                     <a 
@@ -77,7 +77,7 @@ export function InquiryPanel({ isOpen, onClose, artwork }: InquiryPanelProps) {
                         <path d="M12 8v8M8 12h8" strokeLinecap="round"/>
                       </svg>
                       <div className="flex flex-col items-start">
-                        <span className="font-sans text-[10px] uppercase tracking-widest text-ghost-white/60 group-hover:text-aged-gold transition-colors">Start a Chat</span>
+                        <span className="font-sans text-[16px] uppercase tracking-widest text-ghost-white/60 group-hover:text-aged-gold transition-colors">Start a Chat</span>
                         <span className="font-serif text-lg text-warm-ivory italic leading-none">WhatsApp</span>
                       </div>
                     </a>
@@ -91,7 +91,7 @@ export function InquiryPanel({ isOpen, onClose, artwork }: InquiryPanelProps) {
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                       </svg>
                       <div className="flex flex-col items-start">
-                        <span className="font-sans text-[10px] uppercase tracking-widest text-ghost-white/60 group-hover:text-aged-gold transition-colors">Call Studio</span>
+                        <span className="font-sans text-[16px] uppercase tracking-widest text-ghost-white/60 group-hover:text-aged-gold transition-colors">Call Studio</span>
                         <span className="font-serif text-lg text-warm-ivory italic leading-none">+91 98906 46123</span>
                       </div>
                     </a>
@@ -99,7 +99,7 @@ export function InquiryPanel({ isOpen, onClose, artwork }: InquiryPanelProps) {
                 </div>
 
                 <div className="pt-8 text-center">
-                  <p className="font-serif italic text-sm text-ghost-white/40">
+                  <p className="font-serif italic text-base text-ghost-white/40">
                     The artist will respond to your inquiry personally.
                   </p>
                 </div>

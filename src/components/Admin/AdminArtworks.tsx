@@ -181,7 +181,7 @@ export function AdminArtworks() {
         <h1 className="font-serif text-4xl italic text-warm-ivory">Artworks</h1>
         <button 
           onClick={() => openModal()}
-          className="bg-aged-gold text-near-black px-6 py-3 font-sans text-xs uppercase tracking-widest hover:bg-warm-ivory transition-colors"
+          className="bg-aged-gold text-near-black px-6 py-3 font-sans text-base uppercase tracking-widest hover:bg-warm-ivory transition-colors"
         >
           Add Artwork
         </button>
@@ -191,7 +191,7 @@ export function AdminArtworks() {
         <div className="text-white">Loading database (Supabase)...</div>
       ) : (
         <div className="bg-deep-charcoal border border-white/5 rounded-sm p-4 h-full">
-          <div className="grid grid-cols-12 gap-4 pb-4 border-b border-white/5 text-[10px] uppercase tracking-widest text-ghost-white/50 mb-4 px-4">
+          <div className="grid grid-cols-12 gap-4 pb-4 border-b border-white/5 text-[16px] uppercase tracking-widest text-ghost-white/50 mb-4 px-4">
             <div className="col-span-1">Image</div>
             <div className="col-span-4">Title</div>
             <div className="col-span-2">Medium</div>
@@ -215,12 +215,12 @@ export function AdminArtworks() {
                   )}
                 </div>
                 <div className="col-span-4 font-serif text-lg text-warm-ivory italic truncate">{artwork.title}</div>
-                <div className="col-span-2 text-xs text-ghost-white/70">{artwork.medium}</div>
-                <div className="col-span-1 text-xs text-aged-gold">{artwork.year}</div>
+                <div className="col-span-2 text-base text-ghost-white/70">{artwork.medium}</div>
+                <div className="col-span-1 text-base text-aged-gold">{artwork.year}</div>
                 <div className="col-span-2">
                   <button 
                     onClick={(e) => handleToggleVisibility(e, artwork.id, artwork.is_visible)}
-                    className={`text-[10px] px-3 py-1 uppercase tracking-widest border ${artwork.is_visible ? 'border-green-500/50 text-green-400' : 'border-red-500/50 text-red-400'}`}
+                    className={`text-[16px] px-3 py-1 uppercase tracking-widest border ${artwork.is_visible ? 'border-green-500/50 text-green-400' : 'border-red-500/50 text-red-400'}`}
                   >
                     {artwork.is_visible ? 'Visible' : 'Hidden'}
                   </button>
@@ -229,14 +229,14 @@ export function AdminArtworks() {
                   <button 
                     onPointerDown={(e) => e.stopPropagation()} 
                     onClick={() => openModal(artwork)} 
-                    className="text-xs uppercase text-ghost-white/50 hover:text-aged-gold transition-colors"
+                    className="text-base uppercase text-ghost-white/50 hover:text-aged-gold transition-colors"
                   >
                     Edit
                   </button>
                   <button 
                     onPointerDown={(e) => e.stopPropagation()} 
                     onClick={() => handleDelete(artwork.id, artwork.title)} 
-                    className="text-xs uppercase text-red-500/50 hover:text-red-500 transition-colors"
+                    className="text-base uppercase text-red-500/50 hover:text-red-500 transition-colors"
                   >
                     Delete
                   </button>
@@ -263,38 +263,38 @@ export function AdminArtworks() {
             <form onSubmit={handleSave} className="space-y-6">
                <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="text-[10px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Title</label>
-                  <input required type="text" value={formData.title || ''} onChange={e => setFormData({ ...formData, title: e.target.value })} className="w-full bg-near-black border border-white/10 p-3 text-sm text-warm-ivory focus:border-aged-gold outline-none" />
+                  <label className="text-[16px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Title</label>
+                  <input required type="text" value={formData.title || ''} onChange={e => setFormData({ ...formData, title: e.target.value })} className="w-full bg-near-black border border-white/10 p-3 text-base text-warm-ivory focus:border-aged-gold outline-none" />
                 </div>
                 <div>
-                  <label className="text-[10px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Category</label>
-                  <input required type="text" value={formData.category || ''} onChange={e => setFormData({ ...formData, category: e.target.value })} className="w-full bg-near-black border border-white/10 p-3 text-sm text-warm-ivory focus:border-aged-gold outline-none" placeholder="e.g. Oil, Landscapes, etc." />
+                  <label className="text-[16px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Category</label>
+                  <input required type="text" value={formData.category || ''} onChange={e => setFormData({ ...formData, category: e.target.value })} className="w-full bg-near-black border border-white/10 p-3 text-base text-warm-ivory focus:border-aged-gold outline-none" placeholder="e.g. Oil, Landscapes, etc." />
                 </div>
               </div>
 
               <div className="grid grid-cols-3 gap-6">
                 <div>
-                  <label className="text-[10px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Medium (display text)</label>
-                  <input required type="text" value={formData.medium || ''} onChange={e => setFormData({ ...formData, medium: e.target.value })} className="w-full bg-near-black border border-white/10 p-3 text-sm text-warm-ivory focus:border-aged-gold outline-none" placeholder="e.g. Oil on Canvas" />
+                  <label className="text-[16px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Medium (display text)</label>
+                  <input required type="text" value={formData.medium || ''} onChange={e => setFormData({ ...formData, medium: e.target.value })} className="w-full bg-near-black border border-white/10 p-3 text-base text-warm-ivory focus:border-aged-gold outline-none" placeholder="e.g. Oil on Canvas" />
                 </div>
                 <div>
-                  <label className="text-[10px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Year</label>
-                  <input required type="number" value={formData.year || ''} onChange={e => setFormData({ ...formData, year: Number(e.target.value) })} className="w-full bg-near-black border border-white/10 p-3 text-sm text-warm-ivory focus:border-aged-gold outline-none" />
+                  <label className="text-[16px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Year</label>
+                  <input required type="number" value={formData.year || ''} onChange={e => setFormData({ ...formData, year: Number(e.target.value) })} className="w-full bg-near-black border border-white/10 p-3 text-base text-warm-ivory focus:border-aged-gold outline-none" />
                 </div>
                 <div>
-                  <label className="text-[10px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Size</label>
-                  <input required type="text" value={formData.size_cm || ''} onChange={e => setFormData({ ...formData, size_cm: e.target.value })} className="w-full bg-near-black border border-white/10 p-3 text-sm text-warm-ivory focus:border-aged-gold outline-none" placeholder="e.g. 90x120cm" />
+                  <label className="text-[16px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Size</label>
+                  <input required type="text" value={formData.size_cm || ''} onChange={e => setFormData({ ...formData, size_cm: e.target.value })} className="w-full bg-near-black border border-white/10 p-3 text-base text-warm-ivory focus:border-aged-gold outline-none" placeholder="e.g. 90x120cm" />
                 </div>
               </div>
 
               <div>
-                <label className="text-[10px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Image Upload</label>
+                <label className="text-[16px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Image Upload</label>
                 <div {...getRootProps()} className={`w-full border-2 border-dashed p-8 text-center cursor-pointer transition-colors ${isDragActive ? 'border-aged-gold bg-aged-gold/5' : 'border-white/10 bg-near-black hover:border-white/30'}`}>
                   <input {...getInputProps()} />
                   {formData.image_url ? (
                     <img src={formData.image_url} alt="Preview" className="h-32 mx-auto object-contain" />
                   ) : (
-                    <p className="text-sm text-ghost-white/50">Drag 'n' drop an image here, or click to select</p>
+                    <p className="text-base text-ghost-white/50">Drag 'n' drop an image here, or click to select</p>
                   )}
                   {uploadProgress > 0 && uploadProgress < 100 && (
                     <div className="w-full bg-deep-charcoal h-1 mt-4">
@@ -305,13 +305,13 @@ export function AdminArtworks() {
               </div>
 
               <div>
-                <label className="text-[10px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Description</label>
-                <textarea value={formData.description || ''} onChange={e => setFormData({ ...formData, description: e.target.value })} className="w-full bg-near-black border border-white/10 p-3 text-sm text-warm-ivory focus:border-aged-gold outline-none h-24 resize-none" />
+                <label className="text-[16px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Description</label>
+                <textarea value={formData.description || ''} onChange={e => setFormData({ ...formData, description: e.target.value })} className="w-full bg-near-black border border-white/10 p-3 text-base text-warm-ivory focus:border-aged-gold outline-none h-24 resize-none" />
               </div>
 
               <div className="flex justify-end space-x-4 pt-4 border-t border-white/10">
-                <button type="button" onClick={() => setIsModalOpen(false)} className="px-6 py-3 uppercase tracking-widest text-xs font-sans text-ghost-white/50 hover:text-white">Cancel</button>
-                <button type="submit" className="px-6 py-3 uppercase tracking-widest text-xs font-sans bg-aged-gold text-near-black">{formData.id ? 'Save Changes' : 'Create Artwork'}</button>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="px-6 py-3 uppercase tracking-widest text-base font-sans text-ghost-white/50 hover:text-white">Cancel</button>
+                <button type="submit" className="px-6 py-3 uppercase tracking-widest text-base font-sans bg-aged-gold text-near-black">{formData.id ? 'Save Changes' : 'Create Artwork'}</button>
               </div>
             </form>
           </motion.div>

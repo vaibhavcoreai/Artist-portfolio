@@ -76,7 +76,7 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
             animate={{ y: '0%' }}
             transition={{ delay: 0.8, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            <span className="font-sans text-[10px] md:text-xs uppercase tracking-[0.6em] text-aged-gold/90 block">
+            <span className="font-sans text-[16px] md:text-base uppercase tracking-[0.6em] text-aged-gold/90 block">
               Artist Portfolio
             </span>
           </motion.div>

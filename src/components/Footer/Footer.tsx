@@ -27,7 +27,7 @@ export function Footer() {
           <h2 className="text-display text-warm-ivory italic leading-none mb-4">
             Deepak<br />Patil
           </h2>
-          <p className="font-sans text-xs tracking-[0.3em] uppercase text-aged-gold">
+          <p className="font-sans text-base tracking-[0.3em] uppercase text-aged-gold">
             Fine Art · Solapur, India
           </p>
         </div>
@@ -38,7 +38,7 @@ export function Footer() {
             <NavLink
               key={item}
               to={`/${item.toLowerCase()}`}
-              className="font-sans text-xs tracking-widest uppercase text-ghost-white hover:text-aged-gold transition-colors inline-block w-max link-underline pb-1"
+              className="font-sans text-base tracking-widest uppercase text-ghost-white hover:text-aged-gold transition-colors inline-block w-max link-underline pb-1"
               data-cursor="hover"
             >
               {item}
@@ -49,7 +49,7 @@ export function Footer() {
         {/* Right: Contact & Icons */}
         <div className="flex flex-col items-start md:items-end space-y-12 md:pt-4">
           <div className="flex flex-col items-start md:items-end space-y-4">
-            <a href="mailto:deepak_patilart@rediffmail.com" className="font-sans text-sm tracking-widest text-ghost-white hover:text-aged-gold transition-colors link-underline pb-1" data-cursor="hover">
+            <a href="mailto:deepak_patilart@rediffmail.com" className="font-sans text-base tracking-widest text-ghost-white hover:text-aged-gold transition-colors link-underline pb-1" data-cursor="hover">
               deepak_patilart@rediffmail.com
             </a>
 
@@ -84,7 +84,7 @@ export function Footer() {
       </div>
 
       <div className="w-full mt-32 text-center">
-        <p className="font-sans text-[10px] uppercase tracking-widest text-ghost-white/20 select-none">
+        <p className="font-sans text-[16px] uppercase tracking-widest text-ghost-white/20 select-none">
           © {new Date().getFullYear()} Deepak Patil. All rights reserved.
         </p>
       </div>

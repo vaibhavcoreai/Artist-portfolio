@@ -56,7 +56,7 @@ export function Gallery() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 space-y-8 md:space-y-0 border-b border-white/5 pb-8">
           <div>
             <h2 className="text-headline text-warm-ivory italic mb-2">Selected Works</h2>
-            <p className="font-sans text-xs tracking-[0.2em] text-ghost-white/50 uppercase">
+            <p className="font-sans text-base tracking-[0.2em] text-ghost-white/50 uppercase">
               2022 — Present
             </p>
           </div>
@@ -65,7 +65,7 @@ export function Gallery() {
         {items.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center border border-white/5 bg-white/[0.02] rounded-sm">
             <p className="font-serif italic text-2xl text-warm-ivory/30 mb-4">The collection is currently quiet.</p>
-            <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-ghost-white/30">New works are added through the administrator panel.</p>
+            <p className="font-sans text-[16px] uppercase tracking-[0.2em] text-ghost-white/30">New works are added through the administrator panel.</p>
           </div>
         ) : (
           <motion.div
@@ -100,7 +100,7 @@ export function Gallery() {
               className="group relative px-10 py-3.5 overflow-hidden rounded-full border border-aged-gold/20 hover:border-aged-gold/50 transition-all duration-500 hover:shadow-[0_0_20px_rgba(184,134,11,0.1)]"
             >
               <div className="absolute inset-0 bg-aged-gold/5 -translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-              <span className="relative font-sans text-[11px] tracking-[0.3em] uppercase text-warm-ivory/80 group-hover:text-warm-ivory flex items-center">
+              <span className="relative font-sans text-[15px] tracking-[0.3em] uppercase text-warm-ivory/80 group-hover:text-warm-ivory flex items-center">
                 Open Gallery
                 <span className="ml-4 opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all">→</span>
               </span>

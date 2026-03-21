@@ -13,9 +13,9 @@ export function InquiryPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
           >
-            <p className="font-sans text-[10px] tracking-[0.3em] uppercase text-aged-gold mb-6">Connect with the Studio</p>
+            <p className="font-sans text-[16px] tracking-[0.3em] uppercase text-aged-gold mb-6">Connect with the Studio</p>
             <h1 className="text-display italic leading-[0.9] text-warm-ivory mb-8 font-serif">Inquiry</h1>
-            <p className="font-sans text-sm font-light text-ghost-white/50 max-w-lg leading-relaxed">
+            <p className="font-sans text-base font-light text-ghost-white/50 max-w-lg leading-relaxed">
               Whether you are looking to acquire an original painting, commission a custom piece, 
               or simply discuss the art — we welcome your message.
             </p>
@@ -31,7 +31,7 @@ export function InquiryPage() {
           <div className="w-full flex flex-col space-y-12">
             
             <div className="space-y-8">
-              <h2 className="font-sans text-[10px] uppercase tracking-[0.4em] text-aged-gold text-center">— Select a Direct Channel —</h2>
+              <h2 className="font-sans text-[16px] uppercase tracking-[0.4em] text-aged-gold text-center">— Select a Direct Channel —</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
@@ -48,7 +48,7 @@ export function InquiryPage() {
                     </svg>
                   </div>
                   <div>
-                    <span className="block font-sans text-[10px] uppercase tracking-widest text-ghost-white/40 mb-1">WhatsApp Chat</span>
+                    <span className="block font-sans text-[16px] uppercase tracking-widest text-ghost-white/40 mb-1">WhatsApp Chat</span>
                     <span className="block font-serif text-xl italic text-warm-ivory group-hover:text-aged-gold transition-colors">Digital Studio</span>
                   </div>
                 </a>
@@ -64,7 +64,7 @@ export function InquiryPage() {
                     </svg>
                   </div>
                   <div>
-                    <span className="block font-sans text-[10px] uppercase tracking-widest text-ghost-white/40 mb-1">Phone Line</span>
+                    <span className="block font-sans text-[16px] uppercase tracking-widest text-ghost-white/40 mb-1">Phone Line</span>
                     <span className="block font-serif text-xl italic text-warm-ivory group-hover:text-aged-gold transition-colors">+91 98906 46123</span>
                   </div>
                 </a>
@@ -81,7 +81,7 @@ export function InquiryPage() {
                     </svg>
                   </div>
                   <div className="flex-1 overflow-hidden">
-                    <span className="block font-sans text-[10px] uppercase tracking-widest text-ghost-white/40 mb-1">Formal Inquiry</span>
+                    <span className="block font-sans text-[16px] uppercase tracking-widest text-ghost-white/40 mb-1">Formal Inquiry</span>
                     <span className="block font-serif text-xl italic text-warm-ivory group-hover:text-aged-gold transition-colors truncate">deepak_patilart@rediffmail.com</span>
                   </div>
                 </a>
@@ -90,7 +90,7 @@ export function InquiryPage() {
             </div>
 
             <div className="text-center pt-8">
-               <p className="font-serif italic text-sm text-ghost-white/30">
+               <p className="font-serif italic text-base text-ghost-white/30">
                  The artist usually responds to all personal inquiries within 24-48 hours.
                </p>
             </div>

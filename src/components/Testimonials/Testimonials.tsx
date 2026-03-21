@@ -62,10 +62,10 @@ export function Testimonials() {
               <h3 className="text-3xl md:text-5xl font-serif text-warm-ivory italic leading-relaxed mb-12 drop-shadow-lg">
                 "{quote.text}"
               </h3>
-              <p className="font-sans text-xs uppercase tracking-[0.3em] text-aged-gold mb-2">
+              <p className="font-sans text-base uppercase tracking-[0.3em] text-aged-gold mb-2">
                 {quote.author}
               </p>
-              <p className="font-sans text-xs uppercase tracking-widest text-ghost-white/50">
+              <p className="font-sans text-base uppercase tracking-widest text-ghost-white/50">
                 {quote.location}
               </p>
             </div>

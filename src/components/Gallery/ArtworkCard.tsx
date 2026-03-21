@@ -64,9 +64,9 @@ export function ArtworkCard({ artwork, onClick, onInquire, isLightboxOpen }: Art
         >
           <div className="flex justify-between items-end">
             <div>
-              <p className="font-sans text-[10px] text-aged-gold uppercase tracking-[0.2em] mb-2">{artwork.year}</p>
+              <p className="font-sans text-[16px] text-aged-gold uppercase tracking-[0.2em] mb-2">{artwork.year}</p>
               <h3 className="font-serif text-2xl text-warm-ivory italic leading-none mb-1">{artwork.title}</h3>
-              <p className="font-sans text-xs text-ghost-white/70 tracking-wide">{artwork.medium}</p>
+              <p className="font-sans text-base text-ghost-white/70 tracking-wide">{artwork.medium}</p>
             </div>
             
             <button
@@ -74,13 +74,13 @@ export function ArtworkCard({ artwork, onClick, onInquire, isLightboxOpen }: Art
                 e.stopPropagation();
                 onInquire(artwork);
               }}
-              className="text-xs font-sans tracking-widest text-ghost-white group/btn flex items-center mb-1"
+              className="text-base font-sans tracking-widest text-ghost-white group/btn flex items-center mb-1"
             >
               <span className="hidden md:inline mr-2 opacity-0 group-hover/btn:opacity-100 transition-opacity">
                 Inquire
               </span>
               <span className="w-8 h-[1px] bg-ghost-white flex items-center relative group-hover/btn:w-12 transition-all duration-300">
-                <span className="absolute right-0 text-[10px] transform group-hover/btn:translate-x-1 transition-transform">→</span>
+                <span className="absolute right-0 text-[16px] transform group-hover/btn:translate-x-1 transition-transform">→</span>
               </span>
             </button>
           </div>

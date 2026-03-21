@@ -6,6 +6,7 @@ import { Home } from './pages/Home';
 import { Admin } from './pages/Admin';
 import { AboutPage } from './pages/AboutPage';
 import { GalleryPage } from './pages/GalleryPage';
+import { DoomGalleryPage } from './pages/DoomGalleryPage';
 import { InquiryPage } from './pages/InquiryPage';
 import { useCursor } from './hooks/useCursor';
 import { ScrollToTop } from './components/ScrollToTop';
@@ -35,6 +36,7 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/admin/*" element={<Admin />} />
               <Route path="/gallery" element={<GalleryPage />} />
+              <Route path="/exhibit" element={<DoomGalleryPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/inquiry" element={<InquiryPage />} />
             </Routes>

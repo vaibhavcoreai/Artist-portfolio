@@ -59,7 +59,7 @@ export function Hero() {
         className="relative z-10 flex flex-col items-center select-none"
       >
         {/* Faint Catalog Number */}
-        <div className="absolute -top-16 -left-24 text-warm-ivory/10 font-sans text-sm tracking-[0.3em] pointer-events-none">
+        <div className="absolute -top-16 -left-24 text-warm-ivory/10 font-sans text-base tracking-[0.3em] pointer-events-none">
           № 001
         </div>
 
@@ -105,7 +105,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="font-sans text-[10px] md:text-[14px] font-[200] tracking-[0.2em] md:tracking-[0.4em] text-ghost-white uppercase mb-12 md:mb-16 whitespace-nowrap text-center"
+          className="font-sans text-[12px] md:text-[16px] font-[200] tracking-[0.2em] md:tracking-[0.4em] text-ghost-white uppercase mb-12 md:mb-16 whitespace-nowrap text-center"
         >
           Fine Art · Watercolour · Charcoal
         </motion.p>
@@ -127,7 +127,7 @@ export function Hero() {
           {/* Sweeping Light Sheen */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[200%] group-hover:translate-x-[200%] transition-transform duration-[1500ms] ease-in-out z-20" />
           
-          <span className="relative z-30 flex items-center font-sans text-[10px] md:text-[11px] font-[300] tracking-[0.4em] uppercase text-warm-ivory group-hover:text-white transition-all duration-500">
+          <span className="relative z-30 flex items-center font-sans text-[12px] md:text-[13px] font-[300] tracking-[0.4em] uppercase text-warm-ivory group-hover:text-white transition-all duration-500">
             Enter the Gallery
             <div className="flex flex-col ml-4 transform group-hover:translate-x-1 group-hover:scale-110 transition-all duration-500">
               <svg fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-3.5 h-3.5 text-aged-gold">

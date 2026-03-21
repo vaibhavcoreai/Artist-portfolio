@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSearchParams } from 'react-router-dom';
 import type { Artwork } from '../lib/data';
 import { ArtworkCard } from '../components/Gallery/ArtworkCard';
 import { Lightbox } from '../components/Gallery/Lightbox';
@@ -14,9 +15,23 @@ export function GalleryPage() {
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
   const [inquiryArtwork, setInquiryArtwork] = useState<Artwork | null>(null);
   const [fullScreenArtwork, setFullScreenArtwork] = useState<Artwork | null>(null);
+  const [searchParams] = useSearchParams();
 
   const PAGE_SIZE = 6;
   const totalPages = Math.ceil(items.length / PAGE_SIZE);
+
+  useEffect(() => {
+    const artworkId = searchParams.get('id');
+    if (artworkId && items.length > 0) {
+      const artwork = items.find(item => String(item.id) === artworkId);
+      if (artwork) {
+        setSelectedArtwork(artwork);
+        const index = items.indexOf(artwork);
+        const page = Math.floor(index / PAGE_SIZE) + 1;
+        setCurrentPage(page);
+      }
+    }
+  }, [searchParams, items]);
 
   useEffect(() => {
     async function loadData() {
@@ -75,13 +90,13 @@ export function GalleryPage() {
               transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="max-w-xl shrink-0"
             >
-              <p className="font-sans text-[10px] tracking-[0.3em] uppercase text-aged-gold mb-6">
+              <p className="font-sans text-[16px] tracking-[0.3em] uppercase text-aged-gold mb-6">
                 Complete Collection
               </p>
               <h1 className="text-display italic leading-[0.9] text-warm-ivory mb-8">
                 Gallery
               </h1>
-              <p className="font-sans text-sm font-light text-ghost-white/50 max-w-lg leading-relaxed">
+              <p className="font-sans text-base font-light text-ghost-white/50 max-w-lg leading-relaxed">
                 A curated selection of original paintings spanning watercolour, charcoal,
                 and mixed media — each piece a meditation
                 on light, memory, and the quiet poetry of the everyday.
@@ -107,7 +122,7 @@ export function GalleryPage() {
                     className="absolute top-0 left-0 w-full h-1/2 bg-aged-gold shadow-[0_0_10px_rgba(184,134,11,0.5)]"
                   />
                 </div>
-                <span className="font-sans text-xs uppercase tracking-[0.3em] text-warm-ivory/70 group-hover:text-aged-gold transition-colors">
+                <span className="font-sans text-base uppercase tracking-[0.3em] text-warm-ivory/70 group-hover:text-aged-gold transition-colors">
                   Explore Collection
                 </span>
               </motion.div>
@@ -116,21 +131,21 @@ export function GalleryPage() {
               <div className="flex items-center space-x-8 mt-10 pt-6 border-t border-white/5 max-w-sm">
                 <div className="flex flex-col min-w-[60px]">
                   <span className="font-serif text-2xl italic text-aged-gold leading-none">{items.length}</span>
-                  <span className="font-sans text-[10px] tracking-[0.15em] uppercase text-ghost-white/40 mt-1">Works</span>
+                  <span className="font-sans text-[16px] tracking-[0.15em] uppercase text-ghost-white/40 mt-1">Works</span>
                 </div>
                 <div className="w-px h-6 bg-white/10" />
                 <div className="flex flex-col min-w-[70px]">
                   <span className="font-serif text-2xl italic text-aged-gold leading-none">
                     {new Set(items.map(i => i.category)).size}
                   </span>
-                  <span className="font-sans text-[10px] tracking-[0.15em] uppercase text-ghost-white/40 mt-1">Mediums</span>
+                  <span className="font-sans text-[16px] tracking-[0.15em] uppercase text-ghost-white/40 mt-1">Mediums</span>
                 </div>
                 <div className="w-px h-6 bg-white/10" />
                 <div className="flex flex-col">
                   <span className="font-serif text-2xl italic text-aged-gold leading-none">
                     {items.length > 0 ? `${Math.min(...items.map(i => i.year))}—${Math.max(...items.map(i => i.year))}` : '—'}
                   </span>
-                  <span className="font-sans text-[10px] tracking-[0.15em] uppercase text-ghost-white/40 mt-1">Period</span>
+                  <span className="font-sans text-[16px] tracking-[0.15em] uppercase text-ghost-white/40 mt-1">Period</span>
                 </div>
               </div>
             </motion.div>
@@ -168,7 +183,7 @@ export function GalleryPage() {
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-32 text-center border border-white/5 bg-white/[0.02] rounded-lg">
               <p className="font-serif italic text-3xl text-warm-ivory/20 mb-6">No artworks have been added yet.</p>
-              <p className="font-sans text-xs uppercase tracking-[0.3em] text-ghost-white/30 border border-white/10 px-6 py-3">Please use the Admin board to populate the gallery.</p>
+              <p className="font-sans text-base uppercase tracking-[0.3em] text-ghost-white/30 border border-white/10 px-6 py-3">Please use the Admin board to populate the gallery.</p>
             </div>
           ) : (
             <>
@@ -204,7 +219,7 @@ export function GalleryPage() {
               <div className="flex flex-col items-center mt-24 space-y-12">
 
                 {/* Current Page Status */}
-                <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-aged-gold/40">
+                <span className="font-sans text-[16px] uppercase tracking-[0.4em] text-aged-gold/40">
                   Page {currentPage} of {totalPages}
                 </span>
 
@@ -221,7 +236,7 @@ export function GalleryPage() {
                     <svg fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-4 h-4 md:w-5 md:h-5 text-warm-ivory/50 group-hover:text-aged-gold transition-transform group-hover:-translate-x-1">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                     </svg>
-                    <span className="hidden md:inline font-sans text-[10px] uppercase tracking-[0.3em] text-warm-ivory/60 group-hover:text-warm-ivory">
+                    <span className="hidden md:inline font-sans text-[16px] uppercase tracking-[0.3em] text-warm-ivory/60 group-hover:text-warm-ivory">
                       Previous
                     </span>
                   </button>
@@ -260,7 +275,7 @@ export function GalleryPage() {
                     disabled={currentPage === totalPages}
                     className="flex items-center space-x-2 md:space-x-4 px-3 md:px-6 py-2 md:py-3 rounded-full border border-white/5 hover:border-aged-gold/30 disabled:opacity-30 disabled:pointer-events-none transition-all duration-500 hover:bg-white/[0.02] group"
                   >
-                    <span className="hidden md:inline font-sans text-[10px] uppercase tracking-[0.3em] text-warm-ivory/60 group-hover:text-warm-ivory">
+                    <span className="hidden md:inline font-sans text-[16px] uppercase tracking-[0.3em] text-warm-ivory/60 group-hover:text-warm-ivory">
                       Next
                     </span>
                     <svg fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-4 h-4 md:w-5 md:h-5 text-warm-ivory/50 group-hover:text-aged-gold transition-transform group-hover:translate-x-1">

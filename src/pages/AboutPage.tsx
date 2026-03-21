@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Footer } from '../components/Footer/Footer';
 import AboutImage from '../assets/About.jpg';
+import BlurText from '../components/ui/BlurText';
 
 const AWARDS = [
   'Nehru Cultural Award – 1995',
@@ -105,33 +106,44 @@ export function AboutPage() {
           {/* Left Side: Name and Details */}
           <div className="md:col-span-7 flex flex-col pt-0 md:pt-12">
             
-            <motion.div variants={fadeInUp} className="flex flex-col space-y-6 mb-16 md:mb-24">
-              <h1 className="text-5xl md:text-display italic leading-[1] md:leading-[0.9] text-warm-ivory">
-                Deepak Gurunath<br />Patil
-              </h1>
-            </motion.div>
+            <div className="flex flex-col mb-16 md:mb-24">
+              <BlurText
+                text="Deepak Gurunath"
+                delay={100}
+                animateBy="words"
+                direction="bottom"
+                className="text-5xl md:text-display italic leading-[1.1] md:leading-[1] text-warm-ivory m-0 p-0"
+              />
+              <BlurText
+                text="Patil"
+                delay={100}
+                animateBy="words"
+                direction="bottom"
+                className="text-5xl md:text-display italic leading-[1.1] md:leading-[1] text-warm-ivory m-0 p-0"
+              />
+            </div>
 
             <motion.div variants={fadeInUp} className="flex flex-col space-y-8 font-sans border-t border-white/10 pt-10 max-w-xl">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 text-[11px] uppercase tracking-widest text-ghost-white/70">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 text-[15px] uppercase tracking-widest text-ghost-white/70">
                 <div className="space-y-2 flex flex-col">
-                  <span className="text-aged-gold text-[10px]">Date of Birth</span>
+                  <span className="text-aged-gold text-[16px]">Date of Birth</span>
                   <span className="text-warm-ivory font-medium">4 September 1980</span>
                 </div>
                 <div className="space-y-2 flex flex-col">
-                  <span className="text-aged-gold text-[10px]">Qualifications</span>
-                  <span className="text-warm-ivory font-medium normal-case tracking-normal text-sm leading-relaxed">
+                  <span className="text-aged-gold text-[16px]">Qualifications</span>
+                  <span className="text-warm-ivory font-medium normal-case tracking-normal text-base leading-relaxed">
                     A.T.D., G.D.Art (ptg.),<br />Dip.A.Ed.
                   </span>
                 </div>
                 <div className="space-y-2 flex flex-col md:col-span-2">
-                  <span className="text-aged-gold text-[10px]">Occupation</span>
-                  <span className="text-warm-ivory font-medium normal-case tracking-normal text-sm leading-relaxed">
+                  <span className="text-aged-gold text-[16px]">Occupation</span>
+                  <span className="text-warm-ivory font-medium normal-case tracking-normal text-base leading-relaxed">
                     Principal, Appasaheb Kadadi<br className="md:hidden" /> Chitrakala Mahavidyalaya, Solapur
                   </span>
                 </div>
                 <div className="space-y-2 flex flex-col md:col-span-2">
-                  <span className="text-aged-gold text-[10px]">Contact</span>
-                  <a href="mailto:deepak_patilart@rediffmail.com" className="text-warm-ivory font-medium normal-case tracking-normal hover:text-aged-gold transition tracking-widest text-[13px] truncate">
+                  <span className="text-aged-gold text-[16px]">Contact</span>
+                  <a href="mailto:deepak_patilart@rediffmail.com" className="text-warm-ivory font-medium normal-case tracking-normal hover:text-aged-gold transition tracking-widest text-[15px] truncate">
                     deepak_patilart@rediffmail.com
                   </a>
                 </div>
@@ -175,7 +187,7 @@ export function AboutPage() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="hidden lg:block lg:col-span-3 text-[10px] uppercase tracking-[0.2em] text-ghost-white/40"
+            className="hidden lg:block lg:col-span-3 text-[16px] uppercase tracking-[0.2em] text-ghost-white/40"
           >
             <div className="sticky top-48 flex flex-col space-y-6">
               <a href="#awards" className="hover:text-aged-gold transition-colors">Awards</a>
@@ -197,7 +209,7 @@ export function AboutPage() {
               >
                 Select Awards
               </motion.h2>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 font-sans text-ghost-white/80 text-sm font-light">
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 font-sans text-ghost-white/80 text-base font-light">
                 {AWARDS.map((item, i) => (
                   <motion.li 
                     key={i}
@@ -205,7 +217,7 @@ export function AboutPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.05 }}
-                    className="flex text-[13px] leading-snug tracking-wide"
+                    className="flex text-[15px] leading-snug tracking-wide"
                   >
                     <span className="w-2 h-px bg-aged-gold mt-2.5 mr-4 shrink-0" />
                     {item}
@@ -224,7 +236,7 @@ export function AboutPage() {
               >
                 Exhibitions & Participation
               </motion.h2>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 font-sans text-ghost-white/80 text-sm font-light">
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 font-sans text-ghost-white/80 text-base font-light">
                 {EXHIBITIONS.map((item, i) => (
                   <motion.li 
                     key={`exb-${i}`}
@@ -232,7 +244,7 @@ export function AboutPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.05 }}
-                    className="flex text-[13px] leading-snug tracking-wide"
+                    className="flex text-[15px] leading-snug tracking-wide"
                   >
                     <span className="w-2 h-px bg-aged-gold mt-2.5 mr-4 shrink-0" />
                     {item}
@@ -251,7 +263,7 @@ export function AboutPage() {
               >
                 Group Shows
               </motion.h2>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 font-sans text-ghost-white/80 text-sm font-light">
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 font-sans text-ghost-white/80 text-base font-light">
                 {GROUP_SHOWS.map((item, i) => (
                   <motion.li 
                     key={`gs-${i}`}
@@ -259,7 +271,7 @@ export function AboutPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.05 }}
-                    className="flex text-[13px] leading-snug tracking-wide"
+                    className="flex text-[15px] leading-snug tracking-wide"
                   >
                     <span className="w-2 h-px bg-aged-gold mt-2.5 mr-4 shrink-0" />
                     {item}
@@ -278,7 +290,7 @@ export function AboutPage() {
               >
                 Prominent Collections
               </motion.h2>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 font-sans text-ghost-white/80 text-sm font-light">
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 font-sans text-ghost-white/80 text-base font-light">
                 {COLLECTIONS.map((item, i) => (
                   <motion.li 
                     key={`col-${i}`}
@@ -286,7 +298,7 @@ export function AboutPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.05 }}
-                    className={`flex text-[13px] leading-snug tracking-wide ${i === COLLECTIONS.length - 1 ? 'md:col-span-2 text-aged-gold mt-6 italic font-[400]' : ''}`}
+                    className={`flex text-[15px] leading-snug tracking-wide ${i === COLLECTIONS.length - 1 ? 'md:col-span-2 text-aged-gold mt-6 italic font-[400]' : ''}`}
                   >
                     <span className={`h-px bg-aged-gold mt-2.5 mr-4 shrink-0 ${i === COLLECTIONS.length - 1 ? 'w-4' : 'w-2'}`} />
                     {item}
