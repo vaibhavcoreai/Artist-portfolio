@@ -114,33 +114,7 @@ export function DoomGalleryPage() {
             transition={{ duration: 1.5 }}
             className="w-full h-full"
           >
-            {/* Overlay Info Header */}
-            <div className="absolute top-24 left-6 md:left-12 z-20 pointer-events-none">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5, duration: 1 }}
-              >
-                <p className="font-sans text-[16px] tracking-[0.4em] uppercase text-aged-gold mb-2">
-                  Immersive Viewing
-                </p>
-                <h1 className="font-serif text-3xl md:text-5xl italic text-warm-ivory leading-none">
-                  Infinite Gallery
-                </h1>
-              </motion.div>
-              
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8, duration: 1 }}
-                className="mt-6 flex items-center space-x-3"
-              >
-                <div className="w-2 h-2 rounded-full bg-aged-gold animate-pulse" />
-                <span className="font-sans text-[15px] uppercase tracking-widest text-ghost-white/40">
-                  Live Feed Synchronized
-                </span>
-              </motion.div>
-            </div>
+
 
             {/* Instruction Overlay */}
             <div className="absolute bottom-12 right-6 md:right-12 z-20 pointer-events-none">
