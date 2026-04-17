@@ -1,7 +1,17 @@
+import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 import { motion } from 'framer-motion';
 import { Footer } from '../components/Footer/Footer';
 import AboutImage from '../assets/About.jpg';
 import BlurText from '../components/ui/BlurText';
+
+interface Moment {
+  id: string;
+  image_url: string;
+  title: string;
+  description: string;
+  year: number;
+}
 
 const AWARDS = [
   'Nehru Cultural Award – 1995',
@@ -55,7 +65,22 @@ const COLLECTIONS = [
 ];
 
 export function AboutPage() {
-  
+  const [moments, setMoments] = useState<Moment[]>([]);
+
+  useEffect(() => {
+    const fetchMoments = async () => {
+      const { data, error } = await supabase
+        .from('artist_moments')
+        .select('*')
+        .order('display_order', { ascending: true });
+
+      if (!error && data) {
+        setMoments(data);
+      }
+    };
+    fetchMoments();
+  }, []);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -69,9 +94,9 @@ export function AboutPage() {
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 30, scale: 0.98 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
+    visible: {
+      opacity: 1,
+      y: 0,
       scale: 1,
       transition: {
         duration: 1.2
@@ -81,9 +106,9 @@ export function AboutPage() {
 
   const portraitVariants = {
     hidden: { opacity: 0, scale: 0.9, rotate: -2 },
-    visible: { 
-      opacity: 1, 
-      scale: 1, 
+    visible: {
+      opacity: 1,
+      scale: 1,
       rotate: 0,
       transition: {
         duration: 1.8
@@ -93,19 +118,19 @@ export function AboutPage() {
 
   return (
     <main className="w-full bg-near-black text-warm-ivory min-h-screen pt-32 md:pt-48">
-      
+
       {/* 1 & 2. Unified Header & Portrait Grid */}
-      <motion.section 
+      <motion.section
         variants={containerVariants}
         initial="hidden"
         animate="visible"
         className="container-luxury mb-32 md:mb-48 relative z-10"
       >
         <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-0 items-start">
-          
+
           {/* Left Side: Name and Details */}
           <div className="md:col-span-7 flex flex-col pt-0 md:pt-12">
-            
+
             <div className="flex flex-col mb-16 md:mb-24">
               <BlurText
                 text="Deepak Gurunath"
@@ -154,25 +179,69 @@ export function AboutPage() {
 
           {/* Right Side: Portrait Break */}
           <div className="md:col-span-5 md:pl-12 w-full">
-            <motion.div 
+            <motion.div
               variants={portraitVariants}
               className="w-full aspect-[4/5] md:aspect-[3/4] border border-white/5 relative bg-deep-charcoal rounded-[40px] overflow-hidden shadow-2xl"
             >
-              <motion.img 
+              <motion.img
                 whileHover={{ scale: 1.1 }}
                 transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-                src={AboutImage} 
-                alt="Deepak Patil Artist" 
+                src={AboutImage}
+                alt="Deepak Patil Artist"
                 className="w-full h-full object-cover object-top grayscale opacity-80 mix-blend-lighten"
               />
             </motion.div>
           </div>
-          
+
         </div>
       </motion.section>
 
+      {/* 2.5 Exhibition Moments Grid */}
+      {moments.length > 0 && (
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="container-luxury mb-32 md:mb-48 relative z-20"
+        >
+          <div className="flex flex-col mb-16 border-b border-white/10 pb-12">
+            <h2 className="font-serif text-4xl italic text-aged-gold mb-4">Exhibition Moments</h2>
+            <p className="font-sans text-[16px] tracking-[0.2em] uppercase text-ghost-white/40">From Mumbai Galleries & Solo Exhibitions</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24">
+            {moments.map((moment, idx) => (
+              <motion.div
+                key={moment.id}
+                variants={fadeInUp}
+                className={`flex flex-col space-y-8 ${idx % 2 !== 0 ? 'md:pt-24' : ''}`}
+              >
+                <div className="group relative overflow-hidden bg-deep-charcoal aspect-[4/3] border border-white/5">
+                  <motion.img
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 1.5, ease: [0.33, 1, 0.68, 1] }}
+                    src={moment.image_url}
+                    alt={moment.title}
+                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-1000"
+                  />
+                  <div className="absolute top-6 left-6 px-4 py-2 bg-near-black/80 backdrop-blur-md border border-white/10 text-aged-gold font-sans text-xs tracking-[0.3em] uppercase">
+                    {moment.year}
+                  </div>
+                </div>
+                <div className="space-y-4 max-w-xl">
+                  <h3 className="font-serif text-2xl italic text-warm-ivory">{moment.title}</h3>
+                  <p className="font-sans text-base leading-relaxed text-ghost-white/60 font-light">
+                    {moment.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+      )}
+
       {/* 3. Deep Curriculum Vitae */}
-      <motion.section 
+      <motion.section
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -180,9 +249,9 @@ export function AboutPage() {
         className="container-luxury pb-48 relative z-20"
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-32">
-          
+
           {/* Sticky Left Rail CV Table of Contents */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -190,6 +259,7 @@ export function AboutPage() {
             className="hidden lg:block lg:col-span-3 text-[16px] uppercase tracking-[0.2em] text-ghost-white/40"
           >
             <div className="sticky top-48 flex flex-col space-y-6">
+              {moments.length > 0 && <a href="#moments" className="hover:text-aged-gold transition-colors text-aged-gold/60">Exhibition Moments</a>}
               <a href="#acclaim" className="hover:text-aged-gold transition-colors">Critical Acclaim</a>
               <a href="#awards" className="hover:text-aged-gold transition-colors">Awards</a>
               <a href="#exhibitions" className="hover:text-aged-gold transition-colors">Exhibitions & Participation</a>
@@ -199,10 +269,10 @@ export function AboutPage() {
           </motion.div>
 
           <div className="lg:col-span-9 flex flex-col space-y-20 md:space-y-32 text-warm-ivory">
-            
+
             {/* Critical Acclaim Panel */}
             <div id="acclaim" className="flex flex-col space-y-8 md:space-y-12">
-              <motion.h2 
+              <motion.h2
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -210,7 +280,7 @@ export function AboutPage() {
               >
                 Critical Acclaim
               </motion.h2>
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -243,7 +313,7 @@ export function AboutPage() {
 
             {/* Awards Panel */}
             <div id="awards" className="flex flex-col space-y-8 md:space-y-12">
-              <motion.h2 
+              <motion.h2
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -253,7 +323,7 @@ export function AboutPage() {
               </motion.h2>
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 font-sans text-ghost-white/80 text-base font-light">
                 {AWARDS.map((item, i) => (
-                  <motion.li 
+                  <motion.li
                     key={i}
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -270,7 +340,7 @@ export function AboutPage() {
 
             {/* Exhibitions Panel */}
             <div id="exhibitions" className="flex flex-col space-y-8 md:space-y-12">
-              <motion.h2 
+              <motion.h2
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -280,7 +350,7 @@ export function AboutPage() {
               </motion.h2>
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 font-sans text-ghost-white/80 text-base font-light">
                 {EXHIBITIONS.map((item, i) => (
-                  <motion.li 
+                  <motion.li
                     key={`exb-${i}`}
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -297,7 +367,7 @@ export function AboutPage() {
 
             {/* Group Shows Panel */}
             <div id="groupshows" className="flex flex-col space-y-8 md:space-y-12">
-              <motion.h2 
+              <motion.h2
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -307,7 +377,7 @@ export function AboutPage() {
               </motion.h2>
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 font-sans text-ghost-white/80 text-base font-light">
                 {GROUP_SHOWS.map((item, i) => (
-                  <motion.li 
+                  <motion.li
                     key={`gs-${i}`}
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -324,7 +394,7 @@ export function AboutPage() {
 
             {/* Collections Panel */}
             <div id="collections" className="flex flex-col space-y-8 md:space-y-12">
-              <motion.h2 
+              <motion.h2
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -334,7 +404,7 @@ export function AboutPage() {
               </motion.h2>
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 font-sans text-ghost-white/80 text-base font-light">
                 {COLLECTIONS.map((item, i) => (
-                  <motion.li 
+                  <motion.li
                     key={`col-${i}`}
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -352,7 +422,7 @@ export function AboutPage() {
           </div>
         </div>
       </motion.section>
-      
+
       <Footer />
     </main>
   );
