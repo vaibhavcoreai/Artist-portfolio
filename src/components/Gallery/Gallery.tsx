@@ -39,6 +39,7 @@ export function Gallery() {
             aspectRatio: 0.85, // default portrait ratio for uploaded images
             imageUrl: d.image_url || undefined,
             description: d.description || '',
+            isSold: d.is_sold || false,
           })));
         }
       } catch (err) {

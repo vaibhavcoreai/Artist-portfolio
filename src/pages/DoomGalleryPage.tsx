@@ -29,6 +29,7 @@ export function DoomGalleryPage() {
           aspectRatio: 0.85,
           imageUrl: doc.image_url || undefined,
           description: doc.description || '',
+          isSold: doc.is_sold || false,
         } as Artwork));
         setArtworks(mappedData);
       }

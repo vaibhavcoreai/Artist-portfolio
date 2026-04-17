@@ -49,6 +49,16 @@ export function ArtworkCard({ artwork, onClick, onInquire, isLightboxOpen }: Art
         )}
       </motion.div>
 
+      {/* Status Badge */}
+      <div className={`absolute top-5 right-5 backdrop-blur-md px-4 py-1.5 text-[11px] font-sans font-bold uppercase tracking-[0.3em] z-10 rounded-sm shadow-xl flex items-center transition-colors ${
+        artwork.isSold 
+          ? 'bg-near-black/80 text-aged-gold border border-aged-gold/20' 
+          : 'bg-near-black/60 text-ghost-white/80 border border-white/10'
+      }`}>
+        <div className={`w-1.5 h-1.5 rounded-full mr-2 ${artwork.isSold ? 'bg-aged-gold' : 'bg-green-500/80'}`} />
+        {artwork.isSold ? 'Sold' : 'Available'}
+      </div>
+
 
 
       {/* Hover Overlay */}
@@ -69,20 +79,27 @@ export function ArtworkCard({ artwork, onClick, onInquire, isLightboxOpen }: Art
               <p className="font-sans text-base text-ghost-white/70 tracking-wide">{artwork.medium}</p>
             </div>
             
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onInquire(artwork);
-              }}
-              className="text-base font-sans tracking-widest text-ghost-white group/btn flex items-center mb-1"
-            >
-              <span className="hidden md:inline mr-2 opacity-0 group-hover/btn:opacity-100 transition-opacity">
-                Inquire
-              </span>
-              <span className="w-8 h-[1px] bg-ghost-white flex items-center relative group-hover/btn:w-12 transition-all duration-300">
-                <span className="absolute right-0 text-[16px] transform group-hover/btn:translate-x-1 transition-transform">→</span>
-              </span>
-            </button>
+            {artwork.isSold ? (
+              <div className="text-[13px] font-sans font-bold uppercase tracking-[0.3em] text-aged-gold mb-1 flex items-center">
+                <span className="w-1.5 h-1.5 bg-aged-gold rounded-full mr-2" />
+                Sold
+              </div>
+            ) : (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onInquire(artwork);
+                }}
+                className="text-base font-sans tracking-widest text-ghost-white group/btn flex items-center mb-1"
+              >
+                <span className="hidden md:inline mr-2 opacity-0 group-hover/btn:opacity-100 transition-opacity">
+                  Inquire
+                </span>
+                <span className="w-8 h-[1px] bg-ghost-white flex items-center relative group-hover/btn:w-12 transition-all duration-300">
+                  <span className="absolute right-0 text-[16px] transform group-hover/btn:translate-x-1 transition-transform">→</span>
+                </span>
+              </button>
+            )}
           </div>
         </motion.div>
       </div>

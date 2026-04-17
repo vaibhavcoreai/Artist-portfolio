@@ -125,17 +125,23 @@ export function Lightbox({ artwork, onClose, onInquire, onFullscreen }: Lightbox
               {artwork.description || 'A fleeting capture of light and atmosphere, rendered precisely yet emotionally to evoke a profound stillness.'}
             </p>
 
-            <button 
-              onClick={onInquire}
-              data-cursor="hover"
-              className="group relative flex items-center justify-center py-5 px-8 overflow-hidden rounded-full border border-aged-gold/50 text-warm-ivory uppercase tracking-[0.3em] text-[16px] transition-all duration-700 w-full mb-2"
-            >
-              <div className="absolute inset-0 bg-aged-gold opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              <span className="relative z-10 group-hover:text-near-black flex items-center transition-colors duration-700">
-                Inquire About Price
-                <span className="ml-4 transform group-hover:translate-x-2 transition-transform duration-700">→</span>
-              </span>
-            </button>
+            {artwork.isSold ? (
+              <div className="flex items-center justify-center py-5 px-8 rounded-full border border-aged-gold/20 bg-aged-gold/[0.05] text-aged-gold font-bold uppercase tracking-[0.3em] text-[16px] w-full mb-2 cursor-default select-none">
+                <span>Sold • Private Collection</span>
+              </div>
+            ) : (
+              <button 
+                onClick={onInquire}
+                data-cursor="hover"
+                className="group relative flex items-center justify-center py-5 px-8 overflow-hidden rounded-full border border-aged-gold/50 text-warm-ivory uppercase tracking-[0.3em] text-[16px] transition-all duration-700 w-full mb-2"
+              >
+                <div className="absolute inset-0 bg-aged-gold opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <span className="relative z-10 group-hover:text-near-black flex items-center transition-colors duration-700">
+                  Inquire About Price
+                  <span className="ml-4 transform group-hover:translate-x-2 transition-transform duration-700">→</span>
+                </span>
+              </button>
+            )}
           </div>
         </div>
       </motion.div>

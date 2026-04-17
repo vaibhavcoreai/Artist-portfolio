@@ -190,6 +190,7 @@ export function AboutPage() {
             className="hidden lg:block lg:col-span-3 text-[16px] uppercase tracking-[0.2em] text-ghost-white/40"
           >
             <div className="sticky top-48 flex flex-col space-y-6">
+              <a href="#acclaim" className="hover:text-aged-gold transition-colors">Critical Acclaim</a>
               <a href="#awards" className="hover:text-aged-gold transition-colors">Awards</a>
               <a href="#exhibitions" className="hover:text-aged-gold transition-colors">Exhibitions & Participation</a>
               <a href="#groupshows" className="hover:text-aged-gold transition-colors">Group Shows</a>
@@ -199,6 +200,47 @@ export function AboutPage() {
 
           <div className="lg:col-span-9 flex flex-col space-y-20 md:space-y-32 text-warm-ivory">
             
+            {/* Critical Acclaim Panel */}
+            <div id="acclaim" className="flex flex-col space-y-8 md:space-y-12">
+              <motion.h2 
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="font-serif text-3xl italic text-aged-gold border-b border-white/10 pb-6 uppercase tracking-wider"
+              >
+                Critical Acclaim
+              </motion.h2>
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="font-sans text-ghost-white/80 text-[17px] font-light space-y-6 max-w-3xl leading-relaxed"
+              >
+                <p>
+                  "Young artist from Solapur Deepak Patil has brought a broad spectrum of portraits depicting women's emotions whilst she drapes, makes over in front of mirror. She is engrossed in 'Shringar' transforming into a beautiful person, expressing different moods.
+                </p>
+                <p>
+                  The work is on a black paper and the colouring is with amazing dexterity with colour pencil. The artist has very diligently kept the texture of the work deceptively close to brush strokes.
+                </p>
+                <p>
+                  Black background of all paintings provides a sharp contrast to the bright colours used by artist. Besides detailing all postures, curves and expressions of the women in different moods, the artist has also painted the details of the beautiful drapery.
+                </p>
+                <p>
+                  The Sanskrit names for each painting like 'Pushpvirahini' truly depicts the yearning of a young girl eagerly awaiting to meet her lover. Whilst 'Priyamvada' is engrossed in a thought of meeting her lover.
+                </p>
+                <p>
+                  The most beautiful painting is 'Deepragini'. The expression of devotion on the face of the young girl. Glow of the lamp on her face reminds me of the most celebrated of painting of Master of yesteryears S.L. Haldankar and his painting 'Lady with a lamp'.
+                </p>
+                <p>
+                  Deepak Patil keeps the promise of returning to connoisseurs with more delight in future."
+                </p>
+                <div className="pt-8 mt-12">
+                  <p className="text-warm-ivory italic font-serif text-2xl">— Shri Kishor Dixit</p>
+                  <p className="text-aged-gold text-[13px] tracking-[0.2em] uppercase mt-2">Poet & Art Critic (Mumbai)</p>
+                </div>
+              </motion.div>
+            </div>
+
             {/* Awards Panel */}
             <div id="awards" className="flex flex-col space-y-8 md:space-y-12">
               <motion.h2 

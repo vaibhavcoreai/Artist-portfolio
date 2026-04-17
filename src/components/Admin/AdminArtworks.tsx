@@ -15,6 +15,7 @@ interface ArtworkEntry {
   image_url: string;
   display_order: number;
   is_visible: boolean;
+  is_sold: boolean;
 }
 
 export function AdminArtworks() {
@@ -79,6 +80,20 @@ export function AdminArtworks() {
     }
   };
 
+  const handleToggleSold = async (e: React.MouseEvent, id: string | undefined, current: boolean) => {
+    e.stopPropagation();
+    if (!id) return;
+    try {
+      setArtworks(artworks.map(a => a.id === id ? { ...a, is_sold: !current } : a));
+      await supabase
+        .from('artworks')
+        .update({ is_sold: !current })
+        .eq('id', id);
+    } catch (err) {
+       console.error('Error toggling sold status:', err);
+    }
+  };
+
   const handleDelete = async (id: string | undefined, title: string) => {
     if (!id) return;
     if (window.confirm(`Are you sure you want to permanently delete "${title}"?`)) {
@@ -98,7 +113,7 @@ export function AdminArtworks() {
     setFormData(artwork || { 
       title: '', medium: '', year: new Date().getFullYear(), 
       size_cm: '', category: '', description: '', image_url: '', 
-      is_visible: true
+      is_visible: true, is_sold: false
     });
     setUploadProgress(0);
     setIsModalOpen(true);
@@ -193,10 +208,10 @@ export function AdminArtworks() {
         <div className="bg-deep-charcoal border border-white/5 rounded-sm p-4 h-full">
           <div className="grid grid-cols-12 gap-4 pb-4 border-b border-white/5 text-[16px] uppercase tracking-widest text-ghost-white/50 mb-4 px-4">
             <div className="col-span-1">Image</div>
-            <div className="col-span-4">Title</div>
+            <div className="col-span-3">Title</div>
             <div className="col-span-2">Medium</div>
             <div className="col-span-1">Year</div>
-            <div className="col-span-2">Visibility</div>
+            <div className="col-span-3">Status</div>
             <div className="col-span-2 text-right">Actions</div>
           </div>
 
@@ -214,15 +229,21 @@ export function AdminArtworks() {
                     <div className="w-12 h-12 bg-white/5 border border-white/10" />
                   )}
                 </div>
-                <div className="col-span-4 font-serif text-lg text-warm-ivory italic truncate">{artwork.title}</div>
+                <div className="col-span-3 font-serif text-lg text-warm-ivory italic truncate">{artwork.title}</div>
                 <div className="col-span-2 text-base text-ghost-white/70">{artwork.medium}</div>
                 <div className="col-span-1 text-base text-aged-gold">{artwork.year}</div>
-                <div className="col-span-2">
+                <div className="col-span-3 flex space-x-2">
                   <button 
                     onClick={(e) => handleToggleVisibility(e, artwork.id, artwork.is_visible)}
-                    className={`text-[16px] px-3 py-1 uppercase tracking-widest border ${artwork.is_visible ? 'border-green-500/50 text-green-400' : 'border-red-500/50 text-red-400'}`}
+                    className={`text-[12px] px-2 py-1 uppercase tracking-widest border ${artwork.is_visible ? 'border-green-500/50 text-green-400' : 'border-red-500/50 text-red-400'}`}
                   >
                     {artwork.is_visible ? 'Visible' : 'Hidden'}
+                  </button>
+                  <button 
+                    onClick={(e) => handleToggleSold(e, artwork.id, artwork.is_sold)}
+                    className={`text-[12px] px-2 py-1 uppercase tracking-widest border ${artwork.is_sold ? 'border-red-500/50 text-red-400' : 'border-green-500/50 text-green-400'}`}
+                  >
+                    {artwork.is_sold ? 'Sold' : 'Available'}
                   </button>
                 </div>
                 <div className="col-span-2 flex justify-end space-x-4">
@@ -285,6 +306,13 @@ export function AdminArtworks() {
                   <label className="text-[16px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Size</label>
                   <input required type="text" value={formData.size_cm || ''} onChange={e => setFormData({ ...formData, size_cm: e.target.value })} className="w-full bg-near-black border border-white/10 p-3 text-base text-warm-ivory focus:border-aged-gold outline-none" placeholder="e.g. 90x120cm" />
                 </div>
+              </div>
+
+              <div className="flex items-center space-x-4">
+                <label className="flex items-center space-x-2 cursor-pointer group">
+                  <input type="checkbox" checked={formData.is_sold || false} onChange={e => setFormData({ ...formData, is_sold: e.target.checked })} className="w-5 h-5 accent-aged-gold bg-near-black border-white/10" />
+                  <span className="text-[16px] uppercase tracking-widest text-ghost-white/50 group-hover:text-warm-ivory transition-colors">Mark as Sold</span>
+                </label>
               </div>
 
               <div>

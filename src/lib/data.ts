@@ -10,6 +10,7 @@ export interface Artwork {
   aspectRatio: number;
   imageUrl?: string;
   description?: string;
+  isSold?: boolean;
 }
 
 export const ARTWORKS: Artwork[] = [
