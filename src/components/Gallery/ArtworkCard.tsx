@@ -50,12 +50,12 @@ export function ArtworkCard({ artwork, onClick, onInquire, isLightboxOpen }: Art
       </motion.div>
 
       {/* Status Badge */}
-      <div className={`absolute top-5 right-5 backdrop-blur-md px-4 py-1.5 text-[11px] font-sans font-bold uppercase tracking-[0.3em] z-10 rounded-sm shadow-xl flex items-center transition-colors ${
+      <div className={`absolute top-3 right-3 md:top-5 md:right-5 backdrop-blur-md px-2.5 py-1 md:px-4 md:py-1.5 text-[9px] md:text-[11px] font-sans font-bold uppercase tracking-[0.2em] md:tracking-[0.3em] z-10 rounded-sm shadow-xl flex items-center transition-colors ${
         artwork.isSold 
           ? 'bg-near-black/80 text-aged-gold border border-aged-gold/20' 
           : 'bg-near-black/60 text-ghost-white/80 border border-white/10'
       }`}>
-        <div className={`w-1.5 h-1.5 rounded-full mr-2 ${artwork.isSold ? 'bg-aged-gold' : 'bg-green-500/80'}`} />
+        <div className={`w-1 h-1 md:w-1.5 md:h-1.5 rounded-full mr-1.5 md:mr-2 ${artwork.isSold ? 'bg-aged-gold' : 'bg-green-500/80'}`} />
         {artwork.isSold ? 'Sold' : 'Available'}
       </div>
 
