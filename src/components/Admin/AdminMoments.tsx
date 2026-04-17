@@ -209,6 +209,11 @@ export function AdminMoments() {
                   ) : (
                     <p className="text-sm text-ghost-white/30 uppercase tracking-widest">Upload Exhibition Photo</p>
                   )}
+                  {uploadProgress > 0 && uploadProgress < 100 && (
+                    <div className="w-full bg-deep-charcoal h-1 mt-4">
+                      <div className="bg-aged-gold h-full transition-all" style={{ width: `${uploadProgress}%` }} />
+                    </div>
+                  )}
                 </div>
               </div>
 
