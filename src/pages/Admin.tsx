@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { AdminArtworks } from '../components/Admin/AdminArtworks';
+import { AdminSettings } from '../components/Admin/AdminSettings';
 
 export function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -100,7 +101,7 @@ export function Admin() {
       <div className="flex-1 bg-near-black overflow-y-auto">
         <Routes>
           <Route path="artworks" element={<AdminArtworks />} />
-          <Route path="settings" element={<div className="p-12 text-warm-ivory">Settings integration pending.</div>} />
+          <Route path="settings" element={<AdminSettings />} />
         </Routes>
       </div>
     </div>
