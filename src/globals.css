@@ -15,10 +15,10 @@
   --color-near-black:     #080608;
   --color-deep-charcoal:  #111014;
   --color-warm-ivory:     #F2EDE4;
-  --color-aged-gold:      #B8956A;
+  --color-aged-gold:      #E8C36B; /* Brightened from #B8956A for better visibility */
   --color-muted-bronze:   #7A5C3A;
   --color-ghost-white:    #FAF8F5;
-  --color-gold-alpha:     rgba(184, 149, 106, 0.15);
+  --color-gold-alpha:     rgba(232, 195, 107, 0.15);
   --color-ivory-alpha:    rgba(242, 237, 228, 0.06);
   --color-overlay-dark:   rgba(8, 6, 8, 0.72);
 

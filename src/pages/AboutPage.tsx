@@ -64,6 +64,31 @@ const COLLECTIONS = [
   'Various private collections in India and abroad.'
 ];
 
+const renderEditorialListItem = (item: string, isLast: boolean = false) => {
+  const parts = item.split(' – ');
+  if (parts.length >= 2) {
+    const yearOrLocation = parts.pop(); // Take the last part as year/location
+    const title = parts.join(' – '); // Rejoin the rest in case there were multiple dashes
+    return (
+      <div className={`flex flex-col sm:flex-row sm:justify-between sm:items-baseline w-full pb-4 border-b border-white/5 group-hover:border-aged-gold/40 transition-colors duration-500`}>
+        <span className="text-[15px] leading-snug tracking-wide text-ghost-white/90 group-hover:text-warm-ivory transition-colors duration-500 pr-4">
+          {title}
+        </span>
+        <span className="font-serif italic text-aged-gold/80 text-sm whitespace-nowrap mt-1 sm:mt-0 group-hover:text-aged-gold transition-colors duration-500">
+          {yearOrLocation}
+        </span>
+      </div>
+    );
+  }
+  return (
+    <div className={`flex flex-col w-full pb-4 ${isLast ? '' : 'border-b border-white/5'} group-hover:border-aged-gold/40 transition-colors duration-500`}>
+      <span className={`text-[15px] leading-snug tracking-wide transition-colors duration-500 ${isLast ? 'text-aged-gold italic font-[400] mt-2' : 'text-ghost-white/90 group-hover:text-warm-ivory'}`}>
+        {item}
+      </span>
+    </div>
+  );
+};
+
 export function AboutPage() {
   const [moments, setMoments] = useState<Moment[]>([]);
 
@@ -129,52 +154,70 @@ export function AboutPage() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-0 items-start">
 
           {/* Left Side: Name and Details */}
-          <div className="md:col-span-7 flex flex-col pt-0 md:pt-12">
+          <div className="md:col-span-7 flex flex-col pt-0 md:pt-8 relative z-10">
+            {/* Decorative line */}
+            <motion.div 
+              initial={{ width: 0 }}
+              animate={{ width: "80px" }}
+              transition={{ duration: 1.5, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="h-px bg-aged-gold mb-10"
+            />
 
-            <div className="flex flex-col mb-16 md:mb-24">
+            <div className="flex flex-col mb-16 md:mb-20">
               <BlurText
                 text="Deepak Gurunath"
-                delay={100}
+                delay={80}
                 animateBy="words"
                 direction="bottom"
-                className="text-5xl md:text-display italic leading-[1.1] md:leading-[1] text-warm-ivory m-0 p-0"
+                className="text-5xl md:text-display italic leading-[1.05] text-warm-ivory m-0 p-0"
               />
               <BlurText
                 text="Patil"
-                delay={100}
+                delay={120}
                 animateBy="words"
                 direction="bottom"
-                className="text-5xl md:text-display italic leading-[1.1] md:leading-[1] text-warm-ivory m-0 p-0"
+                className="text-5xl md:text-display italic leading-[1.05] text-warm-ivory m-0 p-0"
               />
+              <motion.p 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.8 }}
+                className="font-sans text-[11px] md:text-[13px] tracking-[0.4em] text-aged-gold uppercase mt-6 ml-1"
+              >
+                Fine Art · Watercolour · Charcoal
+              </motion.p>
             </div>
 
-            <motion.div variants={fadeInUp} className="flex flex-col space-y-8 font-sans border-t border-white/10 pt-10 max-w-xl">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 text-[15px] uppercase tracking-widest text-ghost-white/70">
-                <div className="space-y-2 flex flex-col">
-                  <span className="text-aged-gold text-[16px]">Date of Birth</span>
-                  <span className="text-warm-ivory font-medium">4 September 1980</span>
+            <motion.div variants={fadeInUp} className="flex flex-col font-sans border-t border-white/10 pt-10 max-w-2xl">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 text-[15px]">
+                {/* Placard-style detail items */}
+                <div className="flex flex-col border-b border-white/5 pb-6">
+                  <span className="text-[11px] uppercase tracking-[0.2em] text-ghost-white/40 mb-2">Date of Birth</span>
+                  <span className="text-warm-ivory font-light text-lg">4 September 1980</span>
                 </div>
-                <div className="space-y-2 flex flex-col">
-                  <span className="text-aged-gold text-[16px]">Qualifications</span>
-                  <span className="text-warm-ivory font-medium normal-case tracking-normal text-base leading-relaxed">
-                    A.T.D., G.D.Art (ptg.),<br />Dip.A.Ed.
+                <div className="flex flex-col border-b border-white/5 pb-6">
+                  <span className="text-[11px] uppercase tracking-[0.2em] text-ghost-white/40 mb-2">Qualifications</span>
+                  <span className="text-warm-ivory font-light text-base leading-relaxed">
+                    A.T.D., G.D.Art (ptg.), Dip.A.Ed.
                   </span>
                 </div>
-                <div className="space-y-2 flex flex-col md:col-span-2">
-                  <span className="text-aged-gold text-[16px]">Occupation</span>
-                  <span className="text-warm-ivory font-medium normal-case tracking-normal text-base leading-relaxed">
-                    Principal, Appasaheb Kadadi<br className="md:hidden" /> Chitrakala Mahavidyalaya, Solapur
+                <div className="flex flex-col border-b border-white/5 pb-6 md:col-span-2">
+                  <span className="text-[11px] uppercase tracking-[0.2em] text-ghost-white/40 mb-2">Occupation</span>
+                  <span className="text-warm-ivory font-light text-lg leading-relaxed">
+                    Principal, Appasaheb Kadadi Chitrakala Mahavidyalaya, Solapur
                   </span>
                 </div>
-                <div className="space-y-2 flex flex-col md:col-span-2">
-                  <span className="text-aged-gold text-[16px]">Contact</span>
-                  <a href="mailto:deepak_patilart@rediffmail.com" className="text-warm-ivory font-medium normal-case tracking-normal hover:text-aged-gold transition tracking-widest text-[15px] truncate">
+                <div className="flex flex-col md:col-span-2">
+                  <span className="text-[11px] uppercase tracking-[0.2em] text-ghost-white/40 mb-2">Contact</span>
+                  <a href="mailto:deepak_patilart@rediffmail.com" className="text-aged-gold hover:text-warm-ivory transition-colors font-light text-lg truncate flex items-center gap-3">
                     deepak_patilart@rediffmail.com
+                    <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                    </svg>
                   </a>
                 </div>
               </div>
             </motion.div>
-
           </div>
 
           {/* Right Side: Portrait Break */}
@@ -271,7 +314,7 @@ export function AboutPage() {
           <div className="lg:col-span-9 flex flex-col space-y-20 md:space-y-32 text-warm-ivory">
 
             {/* Critical Acclaim Panel */}
-            <div id="acclaim" className="flex flex-col space-y-8 md:space-y-12">
+            <div id="acclaim" className="flex flex-col space-y-10 md:space-y-16 relative">
               <motion.h2
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -281,32 +324,44 @@ export function AboutPage() {
                 Critical Acclaim
               </motion.h2>
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="font-sans text-ghost-white/80 text-[17px] font-light space-y-6 max-w-3xl leading-relaxed"
+                transition={{ duration: 1 }}
+                className="relative bg-deep-charcoal/50 border border-white/5 p-8 md:p-14 rounded-2xl overflow-hidden"
               >
-                <p>
-                  "Young artist from Solapur Deepak Patil has brought a broad spectrum of portraits depicting women's emotions whilst she drapes, makes over in front of mirror. She is engrossed in 'Shringar' transforming into a beautiful person, expressing different moods.
-                </p>
-                <p>
-                  The work is on a black paper and the colouring is with amazing dexterity with colour pencil. The artist has very diligently kept the texture of the work deceptively close to brush strokes.
-                </p>
-                <p>
-                  Black background of all paintings provides a sharp contrast to the bright colours used by artist. Besides detailing all postures, curves and expressions of the women in different moods, the artist has also painted the details of the beautiful drapery.
-                </p>
-                <p>
-                  The Sanskrit names for each painting like 'Pushpvirahini' truly depicts the yearning of a young girl eagerly awaiting to meet her lover. Whilst 'Priyamvada' is engrossed in a thought of meeting her lover.
-                </p>
-                <p>
-                  The most beautiful painting is 'Deepragini'. The expression of devotion on the face of the young girl. Glow of the lamp on her face reminds me of the most celebrated of painting of Master of yesteryears S.L. Haldankar and his painting 'Lady with a lamp'.
-                </p>
-                <p>
-                  Deepak Patil keeps the promise of returning to connoisseurs with more delight in future."
-                </p>
-                <div className="pt-8 mt-12">
-                  <p className="text-warm-ivory italic font-serif text-2xl">— Shri Kishor Dixit</p>
-                  <p className="text-aged-gold text-[13px] tracking-[0.2em] uppercase mt-2">Poet & Art Critic (Mumbai)</p>
+                {/* Large background quote mark */}
+                <div className="absolute -top-6 -left-2 text-[200px] leading-none font-serif text-aged-gold/5 select-none pointer-events-none">
+                  "
+                </div>
+                
+                <div className="relative z-10 font-sans text-ghost-white/80 text-[16px] md:text-[18px] font-light space-y-6 max-w-4xl leading-relaxed">
+                  <p className="first-letter:text-5xl first-letter:font-serif first-letter:text-aged-gold first-letter:mr-1 first-letter:float-left">
+                    Young artist from Solapur Deepak Patil has brought a broad spectrum of portraits depicting women's emotions whilst she drapes, makes over in front of mirror. She is engrossed in 'Shringar' transforming into a beautiful person, expressing different moods.
+                  </p>
+                  <p>
+                    The work is on a black paper and the colouring is with amazing dexterity with colour pencil. The artist has very diligently kept the texture of the work deceptively close to brush strokes.
+                  </p>
+                  <p>
+                    Black background of all paintings provides a sharp contrast to the bright colours used by artist. Besides detailing all postures, curves and expressions of the women in different moods, the artist has also painted the details of the beautiful drapery.
+                  </p>
+                  <p>
+                    The Sanskrit names for each painting like 'Pushpvirahini' truly depicts the yearning of a young girl eagerly awaiting to meet her lover. Whilst 'Priyamvada' is engrossed in a thought of meeting her lover.
+                  </p>
+                  <p>
+                    The most beautiful painting is 'Deepragini'. The expression of devotion on the face of the young girl. Glow of the lamp on her face reminds me of the most celebrated of painting of Master of yesteryears S.L. Haldankar and his painting 'Lady with a lamp'.
+                  </p>
+                  <p className="font-serif italic text-xl text-warm-ivory/90 mt-4">
+                    "Deepak Patil keeps the promise of returning to connoisseurs with more delight in future."
+                  </p>
+                  
+                  <div className="pt-10 mt-10 border-t border-white/10 flex items-center gap-6">
+                    <div className="w-12 h-px bg-aged-gold/50" />
+                    <div>
+                      <p className="text-aged-gold font-serif text-2xl italic">Shri Kishor Dixit</p>
+                      <p className="text-ghost-white/50 text-[11px] tracking-[0.2em] uppercase mt-1">Poet & Art Critic (Mumbai)</p>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             </div>
@@ -321,21 +376,21 @@ export function AboutPage() {
               >
                 Select Awards
               </motion.h2>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 font-sans text-ghost-white/80 text-base font-light">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-2">
                 {AWARDS.map((item, i) => (
-                  <motion.li
+                  <motion.div
                     key={i}
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.05 }}
-                    className="flex text-[15px] leading-snug tracking-wide"
+                    className="group flex"
                   >
-                    <span className="w-2 h-px bg-aged-gold mt-2.5 mr-4 shrink-0" />
-                    {item}
-                  </motion.li>
+                    <div className="w-1.5 h-1.5 rounded-full bg-aged-gold/40 mt-2 mr-4 shrink-0 group-hover:bg-aged-gold transition-colors duration-500" />
+                    {renderEditorialListItem(item)}
+                  </motion.div>
                 ))}
-              </ul>
+              </div>
             </div>
 
             {/* Exhibitions Panel */}
@@ -348,21 +403,21 @@ export function AboutPage() {
               >
                 Exhibitions & Participation
               </motion.h2>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 font-sans text-ghost-white/80 text-base font-light">
+              <div className="grid grid-cols-1 gap-y-2 max-w-4xl">
                 {EXHIBITIONS.map((item, i) => (
-                  <motion.li
+                  <motion.div
                     key={`exb-${i}`}
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.05 }}
-                    className="flex text-[15px] leading-snug tracking-wide"
+                    className="group flex"
                   >
-                    <span className="w-2 h-px bg-aged-gold mt-2.5 mr-4 shrink-0" />
-                    {item}
-                  </motion.li>
+                    <div className="w-1.5 h-1.5 rounded-full bg-aged-gold/40 mt-2 mr-4 shrink-0 group-hover:bg-aged-gold transition-colors duration-500" />
+                    {renderEditorialListItem(item)}
+                  </motion.div>
                 ))}
-              </ul>
+              </div>
             </div>
 
             {/* Group Shows Panel */}
@@ -375,21 +430,21 @@ export function AboutPage() {
               >
                 Group Shows
               </motion.h2>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 font-sans text-ghost-white/80 text-base font-light">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-2">
                 {GROUP_SHOWS.map((item, i) => (
-                  <motion.li
+                  <motion.div
                     key={`gs-${i}`}
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.05 }}
-                    className="flex text-[15px] leading-snug tracking-wide"
+                    className="group flex"
                   >
-                    <span className="w-2 h-px bg-aged-gold mt-2.5 mr-4 shrink-0" />
-                    {item}
-                  </motion.li>
+                    <div className="w-1.5 h-1.5 rounded-full bg-aged-gold/40 mt-2 mr-4 shrink-0 group-hover:bg-aged-gold transition-colors duration-500" />
+                    {renderEditorialListItem(item)}
+                  </motion.div>
                 ))}
-              </ul>
+              </div>
             </div>
 
             {/* Collections Panel */}
@@ -402,21 +457,21 @@ export function AboutPage() {
               >
                 Prominent Collections
               </motion.h2>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 font-sans text-ghost-white/80 text-base font-light">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-2">
                 {COLLECTIONS.map((item, i) => (
-                  <motion.li
+                  <motion.div
                     key={`col-${i}`}
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.05 }}
-                    className={`flex text-[15px] leading-snug tracking-wide ${i === COLLECTIONS.length - 1 ? 'md:col-span-2 text-aged-gold mt-6 italic font-[400]' : ''}`}
+                    className={`group flex ${i === COLLECTIONS.length - 1 ? 'md:col-span-2' : ''}`}
                   >
-                    <span className={`h-px bg-aged-gold mt-2.5 mr-4 shrink-0 ${i === COLLECTIONS.length - 1 ? 'w-4' : 'w-2'}`} />
-                    {item}
-                  </motion.li>
+                    <div className={`h-1.5 rounded-full bg-aged-gold/40 mt-2 mr-4 shrink-0 group-hover:bg-aged-gold transition-colors duration-500 ${i === COLLECTIONS.length - 1 ? 'hidden' : 'w-1.5'}`} />
+                    {renderEditorialListItem(item, i === COLLECTIONS.length - 1)}
+                  </motion.div>
                 ))}
-              </ul>
+              </div>
             </div>
 
           </div>
