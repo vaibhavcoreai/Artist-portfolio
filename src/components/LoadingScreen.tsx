@@ -1,143 +1,113 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import BlurText from './ui/BlurText';
+import GaneshaLogo from '../assets/ganesha-logo.svg';
 
 export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   const [phase, setPhase] = useState<'intro' | 'exit'>('intro');
 
   const triggerExit = () => {
     setPhase('exit');
-    setTimeout(onComplete, 900);
+    setTimeout(onComplete, 1200); // Match exit transition duration
   };
 
   return (
     <motion.div
-      className="fixed inset-0 z-[200000] flex items-center justify-center overflow-hidden"
-      animate={phase === 'exit' ? { opacity: 0 } : { opacity: 1 }}
-      transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className="fixed inset-0 z-[200000] flex items-center justify-center overflow-hidden bg-near-black"
+      animate={phase === 'exit' ? { opacity: 0, filter: 'blur(12px)', scale: 1.05 } : { opacity: 1, filter: 'blur(0px)', scale: 1 }}
+      transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
-      {/* Deep black base */}
-      <div className="absolute inset-0 bg-[#050507]" />
-
-      {/* Animated radial glow */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: [0, 0.15, 0.08], scale: [0.5, 1.2, 1.5] }}
-        transition={{ duration: 3, ease: "easeOut" }}
-        className="absolute w-[600px] h-[600px] rounded-full"
+      {/* ── Background Noise/Grain Overlay ── */}
+      <div 
+        className="absolute inset-0 opacity-[0.025] pointer-events-none mix-blend-screen"
         style={{
-          background: 'radial-gradient(circle, rgba(184,134,11,0.25) 0%, transparent 70%)',
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
         }}
       />
 
-      {/* Rotating ring */}
+      {/* ── Abstract Animated Glows ── */}
       <motion.div
-        initial={{ opacity: 0, rotate: 0 }}
-        animate={{ opacity: [0, 0.3, 0.15], rotate: 180 }}
-        transition={{ duration: 3, ease: "linear" }}
-        className="absolute w-48 h-48 md:w-64 md:h-64 rounded-full border border-aged-gold/10"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: [0, 0.15, 0.08], scale: [0.8, 1.1, 1.2] }}
+        transition={{ duration: 4, ease: "easeOut" }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(184,149,106,0.15) 0%, transparent 60%)',
+        }}
+      />
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: [0, 0.1, 0.04], scale: [0.5, 1.4, 1.8] }}
+        transition={{ duration: 5, ease: "easeOut", delay: 0.5 }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(242,237,228,0.08) 0%, transparent 60%)',
+        }}
       />
 
-      {/* Inner rotating ring (opposite direction) */}
-      <motion.div
-        initial={{ opacity: 0, rotate: 0 }}
-        animate={{ opacity: [0, 0.2, 0.1], rotate: -120 }}
-        transition={{ duration: 3, ease: "linear" }}
-        className="absolute w-32 h-32 md:w-44 md:h-44 rounded-full border border-warm-ivory/5"
-      />
-
-      {/* Central content stack */}
+      {/* ── Main Content ── */}
       <div className="relative z-10 flex flex-col items-center">
-
-        {/* Horizontal line — top */}
+        
+        {/* Ganesha Logo */}
         <motion.div
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={{ scaleX: 1, opacity: 1 }}
-          transition={{ delay: 0.3, duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="w-32 md:w-48 h-px bg-gradient-to-r from-transparent via-aged-gold/80 to-transparent mb-8 origin-center"
-        />
-
-        {/* Brush stroke text reveal */}
-        <div className="relative overflow-hidden">
-          <motion.div
-            initial={{ y: '110%' }}
-            animate={{ y: '0%' }}
-            transition={{ delay: 0.5, duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
-          >
-            <span className="font-serif text-6xl md:text-8xl lg:text-9xl italic text-warm-ivory leading-none tracking-tight select-none">
-              Welcome
-            </span>
-          </motion.div>
-        </div>
-
-        {/* Subtitle with mask reveal */}
-        <div className="relative overflow-hidden mt-4">
-          <motion.div
-            initial={{ y: '110%' }}
-            animate={{ y: '0%' }}
-            transition={{ delay: 0.8, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-          >
-            <span className="font-sans text-[16px] md:text-base uppercase tracking-[0.6em] text-aged-gold/90 block">
-              Artist Portfolio
-            </span>
-          </motion.div>
-        </div>
-
-        {/* Horizontal line — bottom */}
-        <motion.div
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={{ scaleX: 1, opacity: 1 }}
-          transition={{ delay: 1.0, duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="w-20 md:w-32 h-px bg-gradient-to-r from-transparent via-warm-ivory/20 to-transparent mt-8 origin-center"
-        />
-
-        {/* Progress bar */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-          className="mt-12 w-32 md:w-40 h-[1px] bg-white/5 rounded-full overflow-hidden"
+          initial={{ opacity: 0, y: 15, filter: 'blur(8px)' }}
+          animate={{ opacity: 0.85, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 1.6, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.2 }}
+          className="mb-10 md:mb-14"
         >
+          <img 
+            src={GaneshaLogo} 
+            alt="Ganesha" 
+            className="w-11 md:w-14 h-auto" 
+            style={{ filter: 'drop-shadow(0 0 12px rgba(232,195,107,0.3)) brightness(1.2)' }}
+          />
+        </motion.div>
+
+        {/* Name Reveal */}
+        <div className="flex flex-col items-center mb-5 overflow-hidden">
+          <BlurText
+            text="DEEPAK PATIL"
+            delay={80}
+            animateBy="words"
+            direction="bottom"
+            className="text-[28px] md:text-5xl font-serif tracking-[0.2em] md:tracking-[0.25em] text-warm-ivory uppercase text-center"
+          />
+        </div>
+
+        {/* Subtitle */}
+        <motion.div
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.4, duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
+          <span className="font-sans text-[9px] md:text-[11px] uppercase tracking-[0.5em] md:tracking-[0.6em] text-aged-gold/70 block text-center ml-2">
+            Fine Art Portfolio
+          </span>
+        </motion.div>
+
+        {/* Elegant Progress Line */}
+        <div className="mt-16 w-40 md:w-56 h-px relative flex items-center justify-center overflow-hidden">
+          {/* Track */}
+          <div className="absolute inset-0 bg-white/5" />
+          {/* Fill */}
           <motion.div
             initial={{ x: '-100%' }}
             animate={{ x: '0%' }}
-            transition={{ delay: 1.3, duration: 1.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+            transition={{ delay: 1.6, duration: 2.2, ease: [0.77, 0, 0.175, 1] }}
             onAnimationComplete={triggerExit}
-            className="h-full bg-gradient-to-r from-aged-gold/40 via-aged-gold to-aged-gold/40 shadow-[0_0_8px_rgba(184,134,11,0.6)]"
+            className="absolute left-0 w-full h-full bg-gradient-to-r from-transparent via-aged-gold to-aged-gold shadow-[0_0_8px_rgba(184,149,106,0.6)]"
           />
-        </motion.div>
+        </div>
       </div>
 
-      {/* Corner decorations */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.15 }}
-        transition={{ delay: 0.6, duration: 1.5 }}
-        className="absolute top-8 left-8 md:top-12 md:left-12"
-      >
-        <div className="w-8 h-px bg-warm-ivory/30" />
-        <div className="w-px h-8 bg-warm-ivory/30" />
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.15 }}
-        transition={{ delay: 0.6, duration: 1.5 }}
-        className="absolute bottom-8 right-8 md:bottom-12 md:right-12"
-      >
-        <div className="flex flex-col items-end">
-          <div className="w-8 h-px bg-warm-ivory/30" />
-          <div className="w-px h-8 bg-warm-ivory/30 self-end" />
-        </div>
-      </motion.div>
-
-      {/* Year watermark */}
+      {/* ── Year Watermark ── */}
       <motion.span
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.06 }}
-        transition={{ delay: 1, duration: 1.5 }}
-        className="absolute bottom-8 left-8 md:bottom-12 md:left-12 font-serif text-[80px] md:text-[120px] italic text-warm-ivory leading-none select-none"
+        animate={{ opacity: 0.03 }}
+        transition={{ delay: 1.0, duration: 2.5 }}
+        className="absolute bottom-[-8%] right-[-5%] font-serif text-[180px] md:text-[280px] italic text-warm-ivory leading-none select-none pointer-events-none"
       >
-        25
+        2024
       </motion.span>
     </motion.div>
   );
