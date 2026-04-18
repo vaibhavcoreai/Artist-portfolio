@@ -32,13 +32,6 @@ export function Hero() {
     }
   };
 
-  const lineVariants: Variants = {
-    hidden: { pathLength: 0, opacity: 0 },
-    show: {
-      pathLength: 1, opacity: 1,
-      transition: { duration: 2.2, ease: 'easeInOut', delay: 1.6 }
-    }
-  };
 
   const fadeUpVariants: Variants = {
     hidden: { opacity: 0, y: 18 },
