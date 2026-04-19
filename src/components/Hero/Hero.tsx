@@ -151,7 +151,7 @@ export function Hero() {
           custom={1.9}
           className="font-sans text-[10px] md:text-[13px] font-[300] tracking-[0.35em] md:tracking-[0.55em] text-ghost-white/80 uppercase mt-6 md:mt-8 mb-10 md:mb-14 whitespace-nowrap text-center"
         >
-          Fine Art &nbsp;·&nbsp; Watercolour &nbsp;·&nbsp; Charcoal
+          Fine Art &nbsp;·&nbsp; Pencil Colour &nbsp;·&nbsp; Charcoal
         </motion.p>
 
         {/* ── CTA Row ─────────────────────────────────────────────────── */}
