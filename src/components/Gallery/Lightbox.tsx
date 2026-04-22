@@ -46,26 +46,16 @@ export function Lightbox({ artwork, onClose, onInquire, onFullscreen }: Lightbox
         {/* Painting Preview */}
         <div className="w-full lg:w-3/5 h-[40vh] lg:h-auto bg-black/40 flex items-center justify-center overflow-hidden border-b lg:border-b-0 lg:border-r border-white/5 relative group/preview shrink-0">
           {artwork.imageUrl ? (
-            <>
+            <div className="absolute inset-0 flex items-center justify-center p-6 md:p-12 lg:p-16">
               <motion.img 
-                initial={{ scale: 1.1, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 1.2, ease: "easeOut" }}
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.8 }}
                 src={artwork.imageUrl} 
                 alt={artwork.title} 
-                className="w-full h-full object-cover opacity-40 group-hover/preview:opacity-60 transition-opacity duration-1000"
+                className="max-w-full max-h-full object-contain shadow-[0_30px_60px_-15px_rgba(0,0,0,0.7)] lg:shadow-[0_50px_100px_-20px_rgba(0,0,0,0.7)] transition-transform duration-1000 group-hover/preview:scale-[1.03]"
               />
-              <div className="absolute inset-0 flex items-center justify-center p-6 md:p-12 lg:p-16">
-                <motion.img 
-                  initial={{ y: 30, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.3, duration: 0.8 }}
-                  src={artwork.imageUrl} 
-                  alt={artwork.title} 
-                  className="max-w-full max-h-full object-contain shadow-[0_30px_60px_-15px_rgba(0,0,0,0.7)] lg:shadow-[0_50px_100px_-20px_rgba(0,0,0,0.7)] transition-transform duration-1000 group-hover/preview:scale-[1.03]"
-                />
-              </div>
-            </>
+            </div>
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <span className="font-serif italic text-warm-ivory/20">Image Preview Unavailable</span>

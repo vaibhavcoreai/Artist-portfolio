@@ -7,7 +7,6 @@ import { Lightbox } from '../components/Gallery/Lightbox';
 import { InquiryPanel } from '../components/Gallery/InquiryPanel';
 import { Footer } from '../components/Footer/Footer';
 import { supabase } from '../lib/supabase';
-import GalleryHeroCollage from '../assets/gallery-hero-collage.jpg';
 
 export function GalleryPage() {
   const [items, setItems] = useState<Artwork[]>([]);
@@ -84,12 +83,12 @@ export function GalleryPage() {
         </div>
 
         <div className="max-w-[1600px] mx-auto relative z-10">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-start gap-12 lg:gap-64">
+          <div className="flex flex-col items-center text-center">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="max-w-xl shrink-0"
+              className="max-w-2xl"
             >
               <p className="font-sans text-[16px] tracking-[0.3em] uppercase text-aged-gold mb-6">
                 Complete Collection
@@ -97,9 +96,9 @@ export function GalleryPage() {
               <h1 className="text-display italic leading-[0.9] text-warm-ivory mb-8">
                 Gallery
               </h1>
-              <p className="font-sans text-base font-light text-ghost-white/50 max-w-lg leading-relaxed">
-                A curated selection of original paintings spanning watercolour, charcoal,
-                and mixed media — each piece a meditation
+              <p className="font-sans text-base font-light text-ghost-white/50 max-w-lg mx-auto leading-relaxed">
+                A curated selection of original paintings spanningColour pencil, watercolour, charcoal, 
+                mix medium — each piece a meditation
                 on light, memory, and the quiet poetry of the everyday.
               </p>
 
@@ -108,7 +107,7 @@ export function GalleryPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.5, duration: 1 }}
-                className="mt-12 flex items-center space-x-4 group cursor-pointer"
+                className="mt-12 flex items-center justify-center space-x-4 group cursor-pointer"
                 onClick={() => {
                   window.scrollTo({
                     top: window.innerHeight * 0.8,
@@ -129,7 +128,7 @@ export function GalleryPage() {
               </motion.div>
 
               {/* Stats bar - Integrated */}
-              <div className="flex items-center space-x-8 mt-10 pt-6 border-t border-white/5 max-w-sm">
+              <div className="flex items-center justify-center space-x-8 mt-10 pt-6 border-t border-white/5 max-w-sm mx-auto">
                 <div className="flex flex-col min-w-[60px]">
                   <span className="font-serif text-2xl italic text-aged-gold leading-none">{items.length}</span>
                   <span className="font-sans text-[16px] tracking-[0.15em] uppercase text-ghost-white/40 mt-1">Works</span>
@@ -148,30 +147,6 @@ export function GalleryPage() {
                   </span>
                   <span className="font-sans text-[16px] tracking-[0.15em] uppercase text-ghost-white/40 mt-1">Period</span>
                 </div>
-              </div>
-            </motion.div>
-
-            {/* Hero Image - Desktop Only */}
-            <motion.div
-              initial={{ opacity: 0, x: 60, rotate: 2 }}
-              animate={{ opacity: 1, x: 0, rotate: 0 }}
-              transition={{ duration: 1.4, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="hidden lg:block relative group"
-            >
-              {/* Decorative accent */}
-              <div className="absolute -top-6 -right-6 w-32 h-32 border-t border-r border-aged-gold/20 rounded-tr-[3rem]" />
-              <div className="absolute -bottom-6 -left-6 w-32 h-32 border-b border-l border-aged-gold/20 rounded-bl-[3rem]" />
-
-              <div className="relative w-[420px] h-[620px] overflow-hidden rounded-[3rem] border border-white/5 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.8)] transition-all duration-700 group-hover:shadow-[0_48px_80px_-16px_rgba(184,149,106,0.15)] group-hover:border-white/10">
-                <img
-                  src={GalleryHeroCollage}
-                  alt="Gallery Collection Collage"
-                  className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-[4s] ease-out group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-near-black/60 via-transparent to-transparent opacity-40" />
-
-                {/* Subtle glass reflection effect on hover */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
               </div>
             </motion.div>
           </div>

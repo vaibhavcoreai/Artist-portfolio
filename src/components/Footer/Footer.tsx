@@ -28,7 +28,7 @@ export function Footer() {
             Deepak<br />Patil
           </h2>
           <p className="font-sans text-base tracking-[0.3em] uppercase text-aged-gold">
-            Fine Art · Solapur, India
+            Fine Artist · Solapur, India
           </p>
         </div>
 
@@ -49,12 +49,12 @@ export function Footer() {
         {/* Right: Contact & Icons */}
         <div className="flex flex-col items-start md:items-end space-y-12 md:pt-4">
           <div className="flex flex-col items-start md:items-end space-y-4">
-            <a href="mailto:deepak_patilart@rediffmail.com" className="font-sans text-base tracking-widest text-ghost-white hover:text-aged-gold transition-colors link-underline pb-1" data-cursor="hover">
-              deepak_patilart@rediffmail.com
+            <a href="mailto:deepakpatilart123@gmail.com" className="font-sans text-base tracking-widest text-ghost-white hover:text-aged-gold transition-colors link-underline pb-1" data-cursor="hover">
+              deepakpatilart123@gmail.com
             </a>
 
             <div className="flex space-x-6 items-center pt-2">
-              <a href="https://www.instagram.com/deepakpatil2430" className="text-ghost-white hover:text-aged-gold transition-colors" data-cursor="hover">
+              <a href="https://www.instagram.com/deepakpatil00001/" className="text-ghost-white hover:text-aged-gold transition-colors" data-cursor="hover">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="hover:scale-110 transition-transform">
                   <path d="M7 2H17A5 5 0 0 1 22 7V17A5 5 0 0 1 17 22H7A5 5 0 0 1 2 17V7A5 5 0 0 1 7 2Z" />
                   <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
@@ -76,7 +76,7 @@ export function Footer() {
           </div>
 
 
-          <MagneticButton onClick={() => window.open(`https://wa.me/919890646123?text=${encodeURIComponent("Hello Deepak, I'm interested in commissioning a custom painting. I’d love to know more about your process and availability.")}`, '_blank')}>
+          <MagneticButton href={`https://wa.me/919890646123?text=${encodeURIComponent("Hello Deepak, I'm interested in commissioning a custom painting. I’d love to know more about your process and availability.")}`}>
             Commission a Painting
           </MagneticButton>
         </div>

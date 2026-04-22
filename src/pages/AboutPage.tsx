@@ -51,8 +51,9 @@ const GROUP_SHOWS = [
 ];
 
 const COLLECTIONS = [
+  'Mr. Mahesh Majrekar, Indian actor, film director, screenwriter and producer – Mumbai',
+  'Mrs. Devaki Pandit, Indian Classical Singer – Mumbai',
   'Mr. Yatin Shah, Chairman of Precision Camshaft – Solapur',
-  'Mrs. Devaki Pandit, Star Singer – Mumbai',
   'Mr. N.K. Sharma – Mumbai',
   'Mr. Amol Chafalkar, Architect – Solapur',
   'Mr. Milind Sathe – Pune',
@@ -156,7 +157,7 @@ export function AboutPage() {
           {/* Left Side: Name and Details */}
           <div className="md:col-span-7 flex flex-col pt-0 md:pt-8 relative z-10">
             {/* Decorative line */}
-            <motion.div 
+            <motion.div
               initial={{ width: 0 }}
               animate={{ width: "80px" }}
               transition={{ duration: 1.5, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -178,13 +179,13 @@ export function AboutPage() {
                 direction="bottom"
                 className="text-5xl md:text-display italic leading-[1.05] text-warm-ivory m-0 p-0"
               />
-              <motion.p 
+              <motion.p
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.8 }}
                 className="font-sans text-[11px] md:text-[13px] tracking-[0.4em] text-aged-gold uppercase mt-6 ml-1"
               >
-                Fine Art · Watercolour · Charcoal
+                Fine Artist · Colour Pencil · Charcoal
               </motion.p>
             </div>
 
@@ -204,13 +205,13 @@ export function AboutPage() {
                 <div className="flex flex-col border-b border-white/5 pb-6 md:col-span-2">
                   <span className="text-[11px] uppercase tracking-[0.2em] text-ghost-white/40 mb-2">Occupation</span>
                   <span className="text-warm-ivory font-light text-lg leading-relaxed">
-                    Principal, Appasaheb Kadadi Chitrakala Mahavidyalaya, Solapur
+                    Artist
                   </span>
                 </div>
                 <div className="flex flex-col md:col-span-2">
                   <span className="text-[11px] uppercase tracking-[0.2em] text-ghost-white/40 mb-2">Contact</span>
-                  <a href="mailto:deepak_patilart@rediffmail.com" className="text-aged-gold hover:text-warm-ivory transition-colors font-light text-lg truncate flex items-center gap-3">
-                    deepak_patilart@rediffmail.com
+                  <a href="mailto:deepakpatilart123@gmail.com" className="text-aged-gold hover:text-warm-ivory transition-colors font-light text-lg truncate flex items-center gap-3">
+                    deepakpatilart123@gmail.com
                     <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                     </svg>
@@ -334,7 +335,7 @@ export function AboutPage() {
                 <div className="absolute -top-6 -left-2 text-[200px] leading-none font-serif text-aged-gold/5 select-none pointer-events-none">
                   "
                 </div>
-                
+
                 <div className="relative z-10 font-sans text-ghost-white/80 text-[16px] md:text-[18px] font-light space-y-6 max-w-4xl leading-relaxed">
                   <p className="first-letter:text-5xl first-letter:font-serif first-letter:text-aged-gold first-letter:mr-1 first-letter:float-left">
                     Young artist from Solapur Deepak Patil has brought a broad spectrum of portraits depicting women's emotions whilst she drapes, makes over in front of mirror. She is engrossed in 'Shringar' transforming into a beautiful person, expressing different moods.
@@ -354,7 +355,7 @@ export function AboutPage() {
                   <p className="font-serif italic text-xl text-warm-ivory/90 mt-4">
                     "Deepak Patil keeps the promise of returning to connoisseurs with more delight in future."
                   </p>
-                  
+
                   <div className="pt-10 mt-10 border-t border-white/10 flex items-center gap-6">
                     <div className="w-12 h-px bg-aged-gold/50" />
                     <div>
