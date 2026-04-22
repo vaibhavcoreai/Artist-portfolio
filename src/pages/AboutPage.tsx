@@ -268,11 +268,11 @@ export function AboutPage() {
                     alt={moment.title}
                     className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-1000"
                   />
-                  <div className="absolute top-6 left-6 px-4 py-2 bg-near-black/80 backdrop-blur-md border border-white/10 text-aged-gold font-sans text-xs tracking-[0.3em] uppercase">
-                    {moment.year}
-                  </div>
                 </div>
                 <div className="space-y-4 max-w-xl">
+                  <div className="text-aged-gold font-sans text-[11px] tracking-[0.3em] uppercase">
+                    {moment.year}
+                  </div>
                   <h3 className="font-serif text-2xl italic text-warm-ivory">{moment.title}</h3>
                   <p className="font-sans text-base leading-relaxed text-ghost-white/60 font-light">
                     {moment.description}
