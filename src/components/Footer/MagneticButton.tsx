@@ -19,11 +19,10 @@ export function MagneticButton({ children, onClick, href }: { children: React.Re
   };
 
   const sharedProps = {
-    ref: buttonRef,
     onMouseMove: handleMouseMove,
     onMouseLeave: handleMouseLeave,
     animate: { x: position.x, y: position.y },
-    transition: { type: "spring", stiffness: 150, damping: 15, mass: 0.1 },
+    transition: { type: "spring" as const, stiffness: 150, damping: 15, mass: 0.1 },
     className: "relative inline-flex items-center justify-center px-8 py-5 border border-aged-gold/50 text-warm-ivory uppercase font-sans text-base tracking-widest overflow-hidden group hover:border-aged-gold transition-colors duration-500",
     "data-cursor": "hover",
   };
@@ -43,6 +42,7 @@ export function MagneticButton({ children, onClick, href }: { children: React.Re
     return (
       <motion.a 
         {...sharedProps} 
+        ref={buttonRef}
         href={href} 
         target="_blank" 
         rel="noopener noreferrer"
@@ -55,6 +55,7 @@ export function MagneticButton({ children, onClick, href }: { children: React.Re
   return (
     <motion.button
       {...sharedProps}
+      ref={buttonRef}
       onClick={() => {
         if (onClick) {
           onClick();

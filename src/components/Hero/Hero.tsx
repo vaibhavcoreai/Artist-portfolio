@@ -77,7 +77,7 @@ export function Hero() {
       >
         <div className="w-px h-16 bg-gradient-to-b from-transparent to-aged-gold/40" />
         <span className="font-sans text-[9px] tracking-[0.35em] text-warm-ivory/50 uppercase [writing-mode:vertical-rl] rotate-180 select-none">
-          Fine Art · 2024
+          Fine Artist · 2026
         </span>
         <div className="w-px h-16 bg-gradient-to-t from-transparent to-aged-gold/40" />
       </motion.div>
