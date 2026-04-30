@@ -140,13 +140,6 @@ export function GalleryPage() {
                   </span>
                   <span className="font-sans text-[16px] tracking-[0.15em] uppercase text-ghost-white/40 mt-1">Mediums</span>
                 </div>
-                <div className="w-px h-6 bg-white/10" />
-                <div className="flex flex-col">
-                  <span className="font-serif text-2xl italic text-aged-gold leading-none">
-                    {items.length > 0 ? `${Math.min(...items.map(i => i.year))}—${Math.max(...items.map(i => i.year))}` : '—'}
-                  </span>
-                  <span className="font-sans text-[16px] tracking-[0.15em] uppercase text-ghost-white/40 mt-1">Period</span>
-                </div>
               </div>
             </motion.div>
           </div>

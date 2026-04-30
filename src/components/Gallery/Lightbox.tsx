@@ -112,7 +112,6 @@ export function Lightbox({ artwork, onClose, onInquire, onFullscreen }: Lightbox
               {[
                 { label: 'Category', value: artwork.category },
                 { label: 'Medium', value: artwork.medium },
-                { label: 'Year', value: artwork.year },
                 { label: 'Dimensions', value: artwork.size }
               ].map((row, idx) => (row.value && (
                 <div key={idx} className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4">

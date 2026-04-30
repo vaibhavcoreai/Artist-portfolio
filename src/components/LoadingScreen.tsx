@@ -11,11 +11,16 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
     setTimeout(onComplete, 1200); // Match exit transition duration
   };
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
   return (
     <motion.div
       className="fixed inset-0 z-[200000] flex items-center justify-center overflow-hidden bg-near-black"
-      animate={phase === 'exit' ? { opacity: 0, filter: 'blur(12px)', scale: 1.05 } : { opacity: 1, filter: 'blur(0px)', scale: 1 }}
-      transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+      animate={phase === 'exit' 
+        ? { opacity: 0, filter: isMobile ? 'blur(0px)' : 'blur(12px)', scale: isMobile ? 1 : 1.05 } 
+        : { opacity: 1, filter: 'blur(0px)', scale: 1 }
+      }
+      transition={{ duration: isMobile ? 0.8 : 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
       {/* ── Background Noise/Grain Overlay ── */}
       <div 

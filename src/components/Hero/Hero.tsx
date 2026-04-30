@@ -24,10 +24,20 @@ export function Hero() {
     }
   };
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
   const letterVariants: Variants = {
-    hidden: { opacity: 0, y: 40, filter: 'blur(12px)', scale: 1.15 },
+    hidden: { 
+      opacity: 0, 
+      y: 40, 
+      filter: isMobile ? 'blur(0px)' : 'blur(12px)', 
+      scale: 1.15 
+    },
     show: {
-      opacity: 1, y: 0, filter: 'blur(0px)', scale: 1,
+      opacity: 1, 
+      y: 0, 
+      filter: 'blur(0px)', 
+      scale: 1,
       transition: { duration: 1.3, ease: [0.25, 0.46, 0.45, 0.94] }
     }
   };
@@ -45,6 +55,7 @@ export function Hero() {
     <section
       ref={containerRef}
       className="relative w-full h-[120vh] bg-near-black overflow-hidden flex items-center justify-center"
+      style={{ willChange: 'transform' }}
     >
       {/* Canvas background */}
       <AntigravityCanvas scrollProgress={scrollYProgress} />
