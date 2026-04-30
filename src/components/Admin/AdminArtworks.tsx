@@ -8,7 +8,6 @@ interface ArtworkEntry {
   id?: string;
   title: string;
   medium: string;
-  year: number;
   size_cm: string;
   category: string;
   description: string;
@@ -111,7 +110,7 @@ export function AdminArtworks() {
 
   const openModal = (artwork?: ArtworkEntry) => {
     setFormData(artwork || { 
-      title: '', medium: '', year: new Date().getFullYear(), 
+      title: '', medium: '', 
       size_cm: '', category: '', description: '', image_url: '', 
       is_visible: true, is_sold: false
     });
@@ -208,9 +207,8 @@ export function AdminArtworks() {
         <div className="bg-deep-charcoal border border-white/5 rounded-sm p-4 h-full">
           <div className="grid grid-cols-12 gap-4 pb-4 border-b border-white/5 text-[16px] uppercase tracking-widest text-ghost-white/50 mb-4 px-4">
             <div className="col-span-1">Image</div>
-            <div className="col-span-3">Title</div>
+            <div className="col-span-4">Title</div>
             <div className="col-span-2">Medium</div>
-            <div className="col-span-1">Year</div>
             <div className="col-span-3">Status</div>
             <div className="col-span-2 text-right">Actions</div>
           </div>
@@ -229,9 +227,8 @@ export function AdminArtworks() {
                     <div className="w-12 h-12 bg-white/5 border border-white/10" />
                   )}
                 </div>
-                <div className="col-span-3 font-serif text-lg text-warm-ivory italic truncate">{artwork.title}</div>
+                <div className="col-span-4 font-serif text-lg text-warm-ivory italic truncate">{artwork.title}</div>
                 <div className="col-span-2 text-base text-ghost-white/70">{artwork.medium}</div>
-                <div className="col-span-1 text-base text-aged-gold">{artwork.year}</div>
                 <div className="col-span-3 flex space-x-2">
                   <button 
                     onClick={(e) => handleToggleVisibility(e, artwork.id, artwork.is_visible)}
@@ -293,14 +290,10 @@ export function AdminArtworks() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 gap-6">
                 <div>
                   <label className="text-[16px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Medium (display text)</label>
                   <input required type="text" value={formData.medium || ''} onChange={e => setFormData({ ...formData, medium: e.target.value })} className="w-full bg-near-black border border-white/10 p-3 text-base text-warm-ivory focus:border-aged-gold outline-none" placeholder="e.g. Oil on Canvas" />
-                </div>
-                <div>
-                  <label className="text-[16px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Year</label>
-                  <input required type="number" value={formData.year || ''} onChange={e => setFormData({ ...formData, year: Number(e.target.value) })} className="w-full bg-near-black border border-white/10 p-3 text-base text-warm-ivory focus:border-aged-gold outline-none" />
                 </div>
                 <div>
                   <label className="text-[16px] uppercase tracking-widest text-ghost-white/50 mb-2 block">Size</label>

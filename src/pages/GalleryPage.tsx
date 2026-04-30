@@ -51,7 +51,6 @@ export function GalleryPage() {
             id: doc.id,
             title: doc.title || 'Untitled',
             medium: doc.medium || '',
-            year: doc.year || new Date().getFullYear(),
             size: doc.size_cm || '',
             category: doc.category || '',
             aspectRatio: 0.85,
