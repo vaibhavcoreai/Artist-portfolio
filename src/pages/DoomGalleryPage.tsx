@@ -23,7 +23,6 @@ export function DoomGalleryPage() {
           id: doc.id,
           title: doc.title || 'Untitled',
           medium: doc.medium || '',
-          year: doc.year || new Date().getFullYear(),
           size: doc.size_cm || '',
           category: doc.category || '',
           aspectRatio: 0.85,
@@ -69,7 +68,7 @@ export function DoomGalleryPage() {
     image: artwork.imageUrl || 'https://picsum.photos/900/900?grayscale',
     link: `/gallery?id=${artwork.id}`, // Link back to main gallery with ID
     title: artwork.title,
-    description: `${artwork.medium}, ${artwork.year}`
+    description: `${artwork.medium}`
   }));
 
   return (
