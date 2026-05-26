@@ -255,7 +255,7 @@ export function GalleryPage() {
                         return pages;
                       };
 
-                      return getVisiblePages().map((item, idx) => {
+                      return getVisiblePages().map((item) => {
                         if (item === 'ellipsis-start' || item === 'ellipsis-end') {
                           return (
                             <span
