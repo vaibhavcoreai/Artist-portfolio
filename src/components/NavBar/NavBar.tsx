@@ -6,6 +6,7 @@ export function NavBar() {
 
   const items: StaggeredMenuItem[] = [
     { label: 'Gallery', ariaLabel: 'View Artwork Gallery', link: '/gallery' },
+    { label: 'Canvas', ariaLabel: 'Immersive Infinite Canvas', link: '/canvas' },
     { label: 'Exhibit', ariaLabel: 'Experience 3D Gallery', link: '/exhibit' },
     { label: 'About', ariaLabel: 'Learn about Deepak Patil', link: '/about' },
     { label: 'Inquiry', ariaLabel: 'Make an Inquiry', link: '/inquiry' },

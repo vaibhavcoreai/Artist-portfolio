@@ -184,14 +184,26 @@ export function GalleryPage() {
               </AnimatePresence>
 
               {/* Pagination & Navigation */}
-              <div className="flex flex-col items-center mt-24 space-y-12">
+              <div className="flex flex-col items-center mt-16 md:mt-24 space-y-6 md:space-y-10">
 
-                {/* Current Page Status */}
-                <span className="font-sans text-[16px] uppercase tracking-[0.4em] text-aged-gold/40">
-                  Page {currentPage} of {totalPages}
-                </span>
+                {/* Progress Bar */}
+                <div className="w-full max-w-[280px] md:max-w-xs flex flex-col items-center gap-3">
+                  <div className="w-full h-[1px] bg-white/[0.06] rounded-full overflow-hidden relative">
+                    <motion.div
+                      className="h-full bg-gradient-to-r from-aged-gold/70 via-aged-gold to-aged-gold/70 rounded-full"
+                      initial={false}
+                      animate={{ width: `${(currentPage / totalPages) * 100}%` }}
+                      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-aged-gold/10 to-transparent animate-pulse" />
+                  </div>
+                  <span className="font-sans text-[10px] md:text-[11px] uppercase tracking-[0.35em] text-warm-ivory/25">
+                    {currentPage} / {totalPages}
+                  </span>
+                </div>
 
-                <div className="flex items-center space-x-2 md:space-x-10">
+                {/* Navigation Row */}
+                <div className="flex items-center gap-2 md:gap-4">
                   {/* Prev Button */}
                   <button
                     onClick={() => {
@@ -199,39 +211,106 @@ export function GalleryPage() {
                       window.scrollTo({ top: 300, behavior: 'smooth' });
                     }}
                     disabled={currentPage === 1}
-                    className="flex items-center space-x-2 md:space-x-4 px-3 md:px-6 py-2 md:py-3 rounded-full border border-white/5 hover:border-aged-gold/30 disabled:opacity-30 disabled:pointer-events-none transition-all duration-500 hover:bg-white/[0.02] group"
+                    className="flex items-center justify-center w-9 h-9 md:w-11 md:h-11 rounded-full border border-white/[0.06] hover:border-aged-gold/30 disabled:opacity-20 disabled:pointer-events-none transition-all duration-500 hover:bg-white/[0.03] group shrink-0"
+                    aria-label="Previous page"
                   >
-                    <svg fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-4 h-4 md:w-5 md:h-5 text-warm-ivory/50 group-hover:text-aged-gold transition-transform group-hover:-translate-x-1">
+                    <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5 md:w-4 md:h-4 text-warm-ivory/40 group-hover:text-aged-gold transition-all duration-300 group-hover:-translate-x-0.5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                     </svg>
-                    <span className="hidden md:inline font-sans text-[16px] uppercase tracking-[0.3em] text-warm-ivory/60 group-hover:text-warm-ivory">
-                      Previous
-                    </span>
                   </button>
 
-                  {/* Page Numbers */}
-                  <div className="flex items-center space-x-2 md:space-x-6">
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
-                      <button
-                        key={num}
-                        onClick={() => {
-                          setCurrentPage(num);
-                          window.scrollTo({ top: 300, behavior: 'smooth' });
-                        }}
-                        className={`w-10 h-10 md:w-12 md:h-12 rounded-full font-serif italic text-base md:text-xl transition-all duration-500 relative flex items-center justify-center ${currentPage === num
-                            ? 'text-aged-gold shadow-[0_0_30px_rgba(184,134,11,0.2)]'
-                            : 'text-warm-ivory/30 hover:text-warm-ivory hover:bg-white/5'
-                          }`}
-                      >
-                        {currentPage === num && (
-                          <motion.div
-                            layoutId="activePage"
-                            className="absolute inset-0 border border-aged-gold/50 rounded-full"
-                          />
-                        )}
-                        {num}
-                      </button>
-                    ))}
+                  {/* Page Numbers with Smart Truncation */}
+                  <div className="flex items-center gap-0.5 md:gap-1">
+                    {(() => {
+                      const getVisiblePages = () => {
+                        if (totalPages <= 5) {
+                          return Array.from({ length: totalPages }, (_, i) => i + 1);
+                        }
+
+                        const pages: (number | 'ellipsis-start' | 'ellipsis-end')[] = [];
+
+                        // Always show first page
+                        pages.push(1);
+
+                        if (currentPage > 3) {
+                          pages.push('ellipsis-start');
+                        }
+
+                        // Pages around current
+                        const start = Math.max(2, currentPage - 1);
+                        const end = Math.min(totalPages - 1, currentPage + 1);
+                        for (let i = start; i <= end; i++) {
+                          pages.push(i);
+                        }
+
+                        if (currentPage < totalPages - 2) {
+                          pages.push('ellipsis-end');
+                        }
+
+                        // Always show last page
+                        if (totalPages > 1) {
+                          pages.push(totalPages);
+                        }
+
+                        return pages;
+                      };
+
+                      return getVisiblePages().map((item, idx) => {
+                        if (item === 'ellipsis-start' || item === 'ellipsis-end') {
+                          return (
+                            <span
+                              key={item}
+                              className="w-6 md:w-8 flex items-center justify-center text-warm-ivory/15 font-serif italic text-xs md:text-sm select-none"
+                            >
+                              ···
+                            </span>
+                          );
+                        }
+
+                        const num = item as number;
+                        const isActive = currentPage === num;
+
+                        return (
+                          <button
+                            key={num}
+                            onClick={() => {
+                              setCurrentPage(num);
+                              window.scrollTo({ top: 300, behavior: 'smooth' });
+                            }}
+                            className={`relative flex items-center justify-center rounded-full font-serif italic transition-all duration-500 ${
+                              isActive
+                                ? 'w-10 h-10 md:w-12 md:h-12 text-base md:text-lg text-aged-gold z-10'
+                                : 'w-8 h-8 md:w-10 md:h-10 text-sm md:text-base text-warm-ivory/25 hover:text-warm-ivory/60'
+                            }`}
+                            aria-label={`Page ${num}`}
+                            aria-current={isActive ? 'page' : undefined}
+                          >
+                            {/* Active page — animated ring + glow */}
+                            {isActive && (
+                              <motion.div
+                                layoutId="activePage"
+                                className="absolute inset-0 rounded-full"
+                                transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                              >
+                                {/* Outer glow */}
+                                <div className="absolute -inset-1 rounded-full bg-aged-gold/[0.06] blur-md" />
+                                {/* Ring */}
+                                <div className="absolute inset-0 rounded-full border border-aged-gold/40" />
+                                {/* Inner subtle fill */}
+                                <div className="absolute inset-0 rounded-full bg-gradient-to-b from-aged-gold/[0.08] to-transparent" />
+                              </motion.div>
+                            )}
+
+                            {/* Hover ring for inactive */}
+                            {!isActive && (
+                              <div className="absolute inset-0 rounded-full border border-transparent hover:border-white/[0.06] transition-colors duration-300" />
+                            )}
+
+                            <span className="relative z-10">{num}</span>
+                          </button>
+                        );
+                      });
+                    })()}
                   </div>
 
                   {/* Next Button */}
@@ -241,12 +320,10 @@ export function GalleryPage() {
                       window.scrollTo({ top: 300, behavior: 'smooth' });
                     }}
                     disabled={currentPage === totalPages}
-                    className="flex items-center space-x-2 md:space-x-4 px-3 md:px-6 py-2 md:py-3 rounded-full border border-white/5 hover:border-aged-gold/30 disabled:opacity-30 disabled:pointer-events-none transition-all duration-500 hover:bg-white/[0.02] group"
+                    className="flex items-center justify-center w-9 h-9 md:w-11 md:h-11 rounded-full border border-white/[0.06] hover:border-aged-gold/30 disabled:opacity-20 disabled:pointer-events-none transition-all duration-500 hover:bg-white/[0.03] group shrink-0"
+                    aria-label="Next page"
                   >
-                    <span className="hidden md:inline font-sans text-[16px] uppercase tracking-[0.3em] text-warm-ivory/60 group-hover:text-warm-ivory">
-                      Next
-                    </span>
-                    <svg fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-4 h-4 md:w-5 md:h-5 text-warm-ivory/50 group-hover:text-aged-gold transition-transform group-hover:translate-x-1">
+                    <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5 md:w-4 md:h-4 text-warm-ivory/40 group-hover:text-aged-gold transition-all duration-300 group-hover:translate-x-0.5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                     </svg>
                   </button>
