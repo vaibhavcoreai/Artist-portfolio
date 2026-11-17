@@ -1,67 +1,14 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { supabase } from '../lib/supabase';
-import type { Artwork } from '../lib/data';
+import { motion } from 'framer-motion';
+import { ARTWORKS } from '../data/artworks';
 import { InfiniteCanvas, type CanvasItem } from '../components/Gallery/InfiniteCanvas';
 
+const artworks = ARTWORKS
+  .filter((item) => item.is_visible !== false)
+  .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
+
 export function CanvasGalleryPage() {
-  const [artworks, setArtworks] = useState<Artwork[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchArtworks = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('artworks')
-        .select('*')
-        .eq('is_visible', true)
-        .order('display_order', { ascending: true });
-
-      if (error) throw error;
-
-      if (data) {
-        const mapped = data.map((doc: any) => ({
-          id: doc.id,
-          title: doc.title || 'Untitled',
-          medium: doc.medium || '',
-          size: doc.size_cm || '',
-          category: doc.category || '',
-          aspectRatio: 0.85,
-          imageUrl: doc.image_url || undefined,
-          description: doc.description || '',
-          isSold: doc.is_sold || false,
-        } as Artwork));
-        setArtworks(mapped);
-      }
-    } catch (err) {
-      console.error('Error fetching artworks:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchArtworks();
-
-    const channel = supabase
-      .channel('artworks_canvas_gallery')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'artworks'
-        },
-        () => fetchArtworks()
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
-
   const canvasItems: CanvasItem[] = artworks.map((artwork) => ({
-    image: artwork.imageUrl || 'https://picsum.photos/900/900?grayscale',
+    image: artwork.thumbnailUrl || artwork.imageUrl || 'https://picsum.photos/900/900?grayscale',
     link: `/gallery?id=${artwork.id}`,
     title: artwork.title,
     description: artwork.medium,
@@ -75,55 +22,40 @@ export function CanvasGalleryPage() {
         <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-muted-bronze/[0.02] blur-[100px] rounded-full" />
       </div>
 
-      <AnimatePresence mode="wait">
-        {loading ? (
-          <motion.div
-            key="loader"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="w-full h-full flex flex-col items-center justify-center"
-          >
-            <div className="w-12 h-12 border-2 border-aged-gold/20 border-t-aged-gold rounded-full animate-spin mb-6" />
-            <p className="font-sans text-[14px] uppercase tracking-[0.4em] text-aged-gold/60 animate-pulse">
-              Loading Canvas
-            </p>
-          </motion.div>
-        ) : artworks.length === 0 ? (
-          <motion.div
-            key="empty"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full h-full flex flex-col items-center justify-center p-12 text-center"
-          >
-            <h1 className="font-serif italic text-4xl text-warm-ivory mb-6 opacity-30">
-              The canvas awaits.
-            </h1>
-            <p className="font-sans text-base uppercase tracking-[0.2em] text-ghost-white/40 max-w-sm leading-loose">
-              No artworks have been added yet.
-            </p>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="canvas"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.5 }}
-            className="w-full h-full"
-          >
-            <InfiniteCanvas
-              items={canvasItems}
-              columns={4}
-              gap={14}
-              cellWidth={260}
-              cellHeight={320}
-              mouseInfluence={0.06}
-              wheelSpeed={1.4}
-              dragSpeed={1}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {artworks.length === 0 ? (
+        <motion.div
+          key="empty"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="w-full h-full flex flex-col items-center justify-center p-12 text-center"
+        >
+          <h1 className="font-serif italic text-4xl text-warm-ivory mb-6 opacity-30">
+            The canvas awaits.
+          </h1>
+          <p className="font-sans text-base uppercase tracking-[0.2em] text-ghost-white/40 max-w-sm leading-loose">
+            No artworks have been added yet.
+          </p>
+        </motion.div>
+      ) : (
+        <motion.div
+          key="canvas"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5 }}
+          className="w-full h-full"
+        >
+          <InfiniteCanvas
+            items={canvasItems}
+            columns={4}
+            gap={14}
+            cellWidth={260}
+            cellHeight={320}
+            mouseInfluence={0.06}
+            wheelSpeed={1.4}
+            dragSpeed={1}
+          />
+        </motion.div>
+      )}
 
       {/* Instruction overlay */}
       <motion.div

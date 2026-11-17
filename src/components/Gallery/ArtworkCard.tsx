@@ -38,9 +38,9 @@ export function ArtworkCard({ artwork, onClick, onInquire, isLightboxOpen }: Art
         layoutId={isLightboxOpen ? undefined : `card-${artwork.id}`}
         className="absolute inset-0 w-full h-full p-[2px]"
       >
-        {artwork.imageUrl ? (
+        {artwork.thumbnailUrl || artwork.imageUrl ? (
           <img 
-            src={artwork.imageUrl} 
+            src={artwork.thumbnailUrl || artwork.imageUrl} 
             alt={artwork.title} 
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
           />

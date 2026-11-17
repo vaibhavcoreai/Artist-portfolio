@@ -1,17 +1,8 @@
-import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
 import { motion } from 'framer-motion';
 import { Footer } from '../components/Footer/Footer';
 import AboutImage from '../assets/About.jpg';
 import BlurText from '../components/ui/BlurText';
-
-interface Moment {
-  id: string;
-  image_url: string;
-  title: string;
-  description: string;
-  year: number;
-}
+import { MOMENTS, type Moment } from '../data/moments';
 
 const AWARDS = [
   'Nehru Cultural Award – 1995',
@@ -90,22 +81,12 @@ const renderEditorialListItem = (item: string, isLast: boolean = false) => {
   );
 };
 
+const staticMoments: Moment[] = [...MOMENTS].sort(
+  (a, b) => (a.display_order ?? 0) - (b.display_order ?? 0)
+);
+
 export function AboutPage() {
-  const [moments, setMoments] = useState<Moment[]>([]);
-
-  useEffect(() => {
-    const fetchMoments = async () => {
-      const { data, error } = await supabase
-        .from('artist_moments')
-        .select('*')
-        .order('display_order', { ascending: true });
-
-      if (!error && data) {
-        setMoments(data);
-      }
-    };
-    fetchMoments();
-  }, []);
+  const moments = staticMoments;
 
   const containerVariants = {
     hidden: { opacity: 0 },
