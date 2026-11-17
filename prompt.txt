@@ -1,0 +1,1 @@
+node scripts/add-artwork.mjs "IMAGE-PATH"

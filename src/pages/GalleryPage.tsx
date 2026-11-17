@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
 import type { Artwork } from '../lib/data';
@@ -12,10 +12,304 @@ const STATIC_ARTWORKS: Artwork[] = ARTWORKS
   .filter(item => item.is_visible !== false)
   .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
 
+// ---------------------------------------------------------------------------
+// GalleryPagination — responsive, accessible, editorial style
+// ---------------------------------------------------------------------------
+interface GalleryPaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
+
+function getDesktopPageRange(current: number, total: number): (number | 'ellipsis-start' | 'ellipsis-end')[] {
+  if (total <= 5) return Array.from({ length: total }, (_, i) => i + 1);
+
+  const pages: (number | 'ellipsis-start' | 'ellipsis-end')[] = [];
+  pages.push(1);
+
+  if (current > 3) {
+    pages.push('ellipsis-start');
+  }
+
+  const start = Math.max(2, current - 1);
+  const end = Math.min(total - 1, current + 1);
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  if (current < total - 2) {
+    pages.push('ellipsis-end');
+  }
+
+  if (total > 1) {
+    pages.push(total);
+  }
+
+  return pages;
+}
+
+function GalleryPagination({ currentPage, totalPages, onPageChange }: GalleryPaginationProps) {
+  if (totalPages <= 1) return null;
+
+  const prevDisabled = currentPage === 1;
+  const nextDisabled = currentPage === totalPages;
+
+  // Mobile (<640px): exactly 4 items in one row [ < ] [ pageA ] [ pageB ] [ > ]
+  // Neighbor is next page; if on last page, neighbor is previous page so order is ascending
+  const isLast = currentPage === totalPages;
+  const mobilePages = isLast
+    ? [currentPage - 1, currentPage]
+    : [currentPage, currentPage + 1];
+
+  const desktopPages = getDesktopPageRange(currentPage, totalPages);
+
+  return (
+    <nav
+      aria-label="Pagination"
+      style={{ marginTop: '48px', marginBottom: '32px' }}
+      className="w-full flex flex-col items-center"
+    >
+      {/* Mobile Layout (< 640px): exactly 4 items, gap-12px, centered, side padding >= 16px */}
+      <div
+        style={{ overflow: 'visible' }}
+        className="w-full px-4 flex sm:hidden justify-center items-center gap-[12px] flex-nowrap overflow-visible"
+      >
+        {/* Prev Arrow */}
+        <button
+          type="button"
+          onClick={() => !prevDisabled && onPageChange(currentPage - 1)}
+          disabled={prevDisabled}
+          aria-label="Previous page"
+          aria-disabled={prevDisabled ? 'true' : undefined}
+          style={{
+            width: '44px',
+            height: '44px',
+            minWidth: '44px',
+            minHeight: '44px',
+            maxWidth: '44px',
+            maxHeight: '44px',
+            padding: 0,
+            boxSizing: 'border-box',
+            flex: 'none',
+          }}
+          className={`w-[44px] h-[44px] p-0 box-border rounded-full flex-none shrink-0 flex items-center justify-center text-[#FAF8F5] border border-[rgba(196,164,104,0.5)] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4A468] focus-visible:ring-offset-2 focus-visible:ring-offset-[#080608] ${
+            prevDisabled
+              ? 'opacity-35 cursor-not-allowed'
+              : 'hover:bg-[rgba(196,164,104,0.08)] hover:border-[rgba(196,164,104,0.8)] cursor-pointer'
+          }`}
+        >
+          <svg
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.8}
+            stroke="currentColor"
+            className="w-5 h-5"
+            aria-hidden="true"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+        </button>
+
+        {/* 2 Page Numbers (Current & Neighbor in ascending order) */}
+        {mobilePages.map((num) => {
+          const isActive = num === currentPage;
+          if (isActive) {
+            return (
+              <button
+                key={num}
+                type="button"
+                onClick={() => onPageChange(num)}
+                aria-label={`Page ${num}`}
+                aria-current="page"
+                style={{
+                  width: '44px',
+                  height: '44px',
+                  minWidth: '44px',
+                  minHeight: '44px',
+                  maxWidth: '44px',
+                  maxHeight: '44px',
+                  padding: 0,
+                  boxSizing: 'border-box',
+                  flex: 'none',
+                  boxShadow: '0 0 12px rgba(196,164,104,0.45), 0 0 4px rgba(196,164,104,0.3)',
+                }}
+                className="w-[44px] h-[44px] p-0 box-border rounded-full flex-none shrink-0 flex items-center justify-center font-serif text-[18px] font-bold bg-[#C4A468] text-[#080608] border border-[#C4A468] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4A468] focus-visible:ring-offset-2 focus-visible:ring-offset-[#080608]"
+              >
+                {num}
+              </button>
+            );
+          }
+
+          return (
+            <button
+              key={num}
+              type="button"
+              onClick={() => onPageChange(num)}
+              aria-label={`Page ${num}`}
+              style={{
+                width: '44px',
+                height: '44px',
+                minWidth: '44px',
+                minHeight: '44px',
+                maxWidth: '44px',
+                maxHeight: '44px',
+                padding: 0,
+                boxSizing: 'border-box',
+                flex: 'none',
+              }}
+              className="w-[44px] h-[44px] p-0 box-border rounded-full flex-none shrink-0 flex items-center justify-center font-serif italic text-[18px] text-[rgba(250,248,245,0.8)] border border-[rgba(196,164,104,0.4)] transition-all duration-200 hover:bg-[rgba(196,164,104,0.08)] hover:text-[#FAF8F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4A468] focus-visible:ring-offset-2 focus-visible:ring-offset-[#080608] cursor-pointer"
+            >
+              {num}
+            </button>
+          );
+        })}
+
+        {/* Next Arrow */}
+        <button
+          type="button"
+          onClick={() => !nextDisabled && onPageChange(currentPage + 1)}
+          disabled={nextDisabled}
+          aria-label="Next page"
+          aria-disabled={nextDisabled ? 'true' : undefined}
+          style={{
+            width: '44px',
+            height: '44px',
+            minWidth: '44px',
+            minHeight: '44px',
+            maxWidth: '44px',
+            maxHeight: '44px',
+            padding: 0,
+            boxSizing: 'border-box',
+            flex: 'none',
+          }}
+          className={`w-[44px] h-[44px] p-0 box-border rounded-full flex-none shrink-0 flex items-center justify-center text-[#FAF8F5] border border-[rgba(196,164,104,0.5)] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4A468] focus-visible:ring-offset-2 focus-visible:ring-offset-[#080608] ${
+            nextDisabled
+              ? 'opacity-35 cursor-not-allowed'
+              : 'hover:bg-[rgba(196,164,104,0.08)] hover:border-[rgba(196,164,104,0.8)] cursor-pointer'
+          }`}
+        >
+          <svg
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.8}
+            stroke="currentColor"
+            className="w-5 h-5"
+            aria-hidden="true"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Desktop Layout (>= 640px): full numbered pagination */}
+      <div className="w-full px-4 hidden sm:flex justify-center items-center gap-2 flex-nowrap">
+        {/* Prev Arrow */}
+        <button
+          type="button"
+          onClick={() => !prevDisabled && onPageChange(currentPage - 1)}
+          disabled={prevDisabled}
+          aria-label="Previous page"
+          aria-disabled={prevDisabled ? 'true' : undefined}
+          className={`w-11 h-11 rounded-full shrink-0 flex items-center justify-center text-[#FAF8F5] border border-[rgba(196,164,104,0.5)] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4A468] focus-visible:ring-offset-2 focus-visible:ring-offset-[#080608] ${
+            prevDisabled
+              ? 'opacity-35 cursor-not-allowed'
+              : 'hover:bg-[rgba(196,164,104,0.08)] hover:border-[rgba(196,164,104,0.8)] cursor-pointer'
+          }`}
+        >
+          <svg
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.8}
+            stroke="currentColor"
+            className="w-4 h-4"
+            aria-hidden="true"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+        </button>
+
+        {/* Page numbers with ellipsis */}
+        {desktopPages.map((item, idx) => {
+          if (item === 'ellipsis-start' || item === 'ellipsis-end') {
+            return (
+              <span
+                key={`${item}-${idx}`}
+                aria-hidden="true"
+                className="flex items-center justify-center w-10 h-10 font-serif italic text-base select-none text-[rgba(250,248,245,0.7)]"
+              >
+                …
+              </span>
+            );
+          }
+
+          const num = item as number;
+          const isActive = currentPage === num;
+
+          if (isActive) {
+            return (
+              <button
+                key={num}
+                type="button"
+                onClick={() => onPageChange(num)}
+                aria-label={`Page ${num}`}
+                aria-current="page"
+                style={{
+                  boxShadow: '0 0 12px rgba(196,164,104,0.45), 0 0 4px rgba(196,164,104,0.3)',
+                }}
+                className="w-11 h-11 rounded-full shrink-0 flex items-center justify-center font-serif text-[16px] font-bold bg-[#C4A468] text-[#080608] border border-[#C4A468] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4A468] focus-visible:ring-offset-2 focus-visible:ring-offset-[#080608]"
+              >
+                {num}
+              </button>
+            );
+          }
+
+          return (
+            <button
+              key={num}
+              type="button"
+              onClick={() => onPageChange(num)}
+              aria-label={`Page ${num}`}
+              className="w-11 h-11 rounded-full shrink-0 flex items-center justify-center font-serif italic text-[16px] text-[rgba(250,248,245,0.7)] border border-[rgba(196,164,104,0.3)] transition-all duration-200 hover:bg-[rgba(196,164,104,0.08)] hover:text-[#FAF8F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4A468] focus-visible:ring-offset-2 focus-visible:ring-offset-[#080608] cursor-pointer"
+            >
+              {num}
+            </button>
+          );
+        })}
+
+        {/* Next Arrow */}
+        <button
+          type="button"
+          onClick={() => !nextDisabled && onPageChange(currentPage + 1)}
+          disabled={nextDisabled}
+          aria-label="Next page"
+          aria-disabled={nextDisabled ? 'true' : undefined}
+          className={`w-11 h-11 rounded-full shrink-0 flex items-center justify-center text-[#FAF8F5] border border-[rgba(196,164,104,0.5)] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4A468] focus-visible:ring-offset-2 focus-visible:ring-offset-[#080608] ${
+            nextDisabled
+              ? 'opacity-35 cursor-not-allowed'
+              : 'hover:bg-[rgba(196,164,104,0.08)] hover:border-[rgba(196,164,104,0.8)] cursor-pointer'
+          }`}
+        >
+          <svg
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.8}
+            stroke="currentColor"
+            className="w-4 h-4"
+            aria-hidden="true"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </button>
+      </div>
+    </nav>
+  );
+}
+
 export function GalleryPage() {
   const [items] = useState<Artwork[]>(STATIC_ARTWORKS);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
+  const galleryGridRef = useRef<HTMLDivElement>(null);
   const [inquiryArtwork, setInquiryArtwork] = useState<Artwork | null>(null);
   const [fullScreenArtwork, setFullScreenArtwork] = useState<Artwork | null>(null);
   const [searchParams] = useSearchParams();
@@ -115,7 +409,7 @@ export function GalleryPage() {
 
       {/* Gallery Grid */}
       <section className="px-6 md:px-12 pb-32">
-        <div className="max-w-[1600px] mx-auto">
+        <div className="max-w-[1600px] mx-auto" ref={galleryGridRef}>
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-32 text-center border border-white/5 bg-white/[0.02] rounded-lg">
               <p className="font-serif italic text-3xl text-warm-ivory/20 mb-6">No artworks have been added yet.</p>
@@ -151,152 +445,17 @@ export function GalleryPage() {
                 </motion.div>
               </AnimatePresence>
 
-              {/* Pagination & Navigation */}
-              <div className="flex flex-col items-center mt-16 md:mt-24 space-y-6 md:space-y-10">
-
-                {/* Progress Bar */}
-                <div className="w-full max-w-[280px] md:max-w-xs flex flex-col items-center gap-3">
-                  <div className="w-full h-[1px] bg-white/[0.06] rounded-full overflow-hidden relative">
-                    <motion.div
-                      className="h-full bg-gradient-to-r from-aged-gold/70 via-aged-gold to-aged-gold/70 rounded-full"
-                      initial={false}
-                      animate={{ width: `${(currentPage / totalPages) * 100}%` }}
-                      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-aged-gold/10 to-transparent animate-pulse" />
-                  </div>
-                  <span className="font-sans text-[10px] md:text-[11px] uppercase tracking-[0.35em] text-warm-ivory/25">
-                    {currentPage} / {totalPages}
-                  </span>
-                </div>
-
-                {/* Navigation Row */}
-                <div className="flex items-center gap-2 md:gap-4">
-                  {/* Prev Button */}
-                  <button
-                    onClick={() => {
-                      setCurrentPage(prev => Math.max(1, prev - 1));
-                      window.scrollTo({ top: 300, behavior: 'smooth' });
-                    }}
-                    disabled={currentPage === 1}
-                    className="flex items-center justify-center w-9 h-9 md:w-11 md:h-11 rounded-full border border-white/[0.06] hover:border-aged-gold/30 disabled:opacity-20 disabled:pointer-events-none transition-all duration-500 hover:bg-white/[0.03] group shrink-0"
-                    aria-label="Previous page"
-                  >
-                    <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5 md:w-4 md:h-4 text-warm-ivory/40 group-hover:text-aged-gold transition-all duration-300 group-hover:-translate-x-0.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                    </svg>
-                  </button>
-
-                  {/* Page Numbers with Smart Truncation */}
-                  <div className="flex items-center gap-0.5 md:gap-1">
-                    {(() => {
-                      const getVisiblePages = () => {
-                        if (totalPages <= 5) {
-                          return Array.from({ length: totalPages }, (_, i) => i + 1);
-                        }
-
-                        const pages: (number | 'ellipsis-start' | 'ellipsis-end')[] = [];
-
-                        // Always show first page
-                        pages.push(1);
-
-                        if (currentPage > 3) {
-                          pages.push('ellipsis-start');
-                        }
-
-                        // Pages around current
-                        const start = Math.max(2, currentPage - 1);
-                        const end = Math.min(totalPages - 1, currentPage + 1);
-                        for (let i = start; i <= end; i++) {
-                          pages.push(i);
-                        }
-
-                        if (currentPage < totalPages - 2) {
-                          pages.push('ellipsis-end');
-                        }
-
-                        // Always show last page
-                        if (totalPages > 1) {
-                          pages.push(totalPages);
-                        }
-
-                        return pages;
-                      };
-
-                      return getVisiblePages().map((item) => {
-                        if (item === 'ellipsis-start' || item === 'ellipsis-end') {
-                          return (
-                            <span
-                              key={item}
-                              className="w-6 md:w-8 flex items-center justify-center text-warm-ivory/15 font-serif italic text-xs md:text-sm select-none"
-                            >
-                              ···
-                            </span>
-                          );
-                        }
-
-                        const num = item as number;
-                        const isActive = currentPage === num;
-
-                        return (
-                          <button
-                            key={num}
-                            onClick={() => {
-                              setCurrentPage(num);
-                              window.scrollTo({ top: 300, behavior: 'smooth' });
-                            }}
-                            className={`relative flex items-center justify-center rounded-full font-serif italic transition-all duration-500 ${
-                              isActive
-                                ? 'w-10 h-10 md:w-12 md:h-12 text-base md:text-lg text-aged-gold z-10'
-                                : 'w-8 h-8 md:w-10 md:h-10 text-sm md:text-base text-warm-ivory/25 hover:text-warm-ivory/60'
-                            }`}
-                            aria-label={`Page ${num}`}
-                            aria-current={isActive ? 'page' : undefined}
-                          >
-                            {/* Active page — animated ring + glow */}
-                            {isActive && (
-                              <motion.div
-                                layoutId="activePage"
-                                className="absolute inset-0 rounded-full"
-                                transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-                              >
-                                {/* Outer glow */}
-                                <div className="absolute -inset-1 rounded-full bg-aged-gold/[0.06] blur-md" />
-                                {/* Ring */}
-                                <div className="absolute inset-0 rounded-full border border-aged-gold/40" />
-                                {/* Inner subtle fill */}
-                                <div className="absolute inset-0 rounded-full bg-gradient-to-b from-aged-gold/[0.08] to-transparent" />
-                              </motion.div>
-                            )}
-
-                            {/* Hover ring for inactive */}
-                            {!isActive && (
-                              <div className="absolute inset-0 rounded-full border border-transparent hover:border-white/[0.06] transition-colors duration-300" />
-                            )}
-
-                            <span className="relative z-10">{num}</span>
-                          </button>
-                        );
-                      });
-                    })()}
-                  </div>
-
-                  {/* Next Button */}
-                  <button
-                    onClick={() => {
-                      setCurrentPage(prev => Math.min(totalPages, prev + 1));
-                      window.scrollTo({ top: 300, behavior: 'smooth' });
-                    }}
-                    disabled={currentPage === totalPages}
-                    className="flex items-center justify-center w-9 h-9 md:w-11 md:h-11 rounded-full border border-white/[0.06] hover:border-aged-gold/30 disabled:opacity-20 disabled:pointer-events-none transition-all duration-500 hover:bg-white/[0.03] group shrink-0"
-                    aria-label="Next page"
-                  >
-                    <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5 md:w-4 md:h-4 text-warm-ivory/40 group-hover:text-aged-gold transition-all duration-300 group-hover:translate-x-0.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <GalleryPagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={(page) => {
+                    setCurrentPage(page);
+                    galleryGridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }}
+                />
+              )}
             </>
           )}
         </div>

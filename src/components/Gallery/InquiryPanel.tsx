@@ -43,26 +43,26 @@ export function InquiryPanel({ isOpen, onClose, artwork }: InquiryPanelProps) {
               </button>
             </div>
 
-            <div className="p-8 flex-1 flex flex-col space-y-12">
+            <div className="p-5 sm:p-8 flex-1 flex flex-col space-y-8 sm:space-y-12">
               {/* Artwork Summary */}
-              <div className="flex space-x-6 bg-near-black/40 p-6 rounded-[16px] border border-white/5">
-                <div className="w-20 h-24 bg-muted-bronze overflow-hidden shrink-0 rounded-sm">
+              <div className="flex gap-4 sm:gap-6 bg-near-black/40 p-4 sm:p-6 rounded-[16px] border border-white/5">
+                <div className="w-16 h-20 sm:w-20 sm:h-24 bg-muted-bronze overflow-hidden shrink-0 rounded-sm">
                   {artwork.imageUrl ? (
                     <img src={artwork.imageUrl} alt={artwork.title} className="w-full h-full object-cover opacity-60" />
                   ) : (
                     <div className="w-full h-full bg-aged-gold/20" />
                   )}
                 </div>
-                <div>
-                  <h3 className="font-serif text-xl text-warm-ivory mb-2">{artwork.title}</h3>
-                  <p className="font-sans text-[15px] tracking-widest uppercase text-ghost-white/50">{artwork.medium}</p>
-                  <p className="font-sans text-[15px] tracking-widest uppercase text-ghost-white/50 mt-1">{artwork.size}</p>
+                <div className="min-w-0">
+                  <h3 className="font-serif text-lg sm:text-xl text-warm-ivory mb-1 sm:mb-2 truncate">{artwork.title}</h3>
+                  <p className="font-sans text-xs sm:text-[15px] tracking-widest uppercase text-ghost-white/50">{artwork.medium}</p>
+                  <p className="font-sans text-xs sm:text-[15px] tracking-widest uppercase text-ghost-white/50 mt-1">{artwork.size}</p>
                 </div>
               </div>
 
               <div className="flex flex-col space-y-6">
                 <div>
-                  <h4 className="font-sans text-[16px] uppercase tracking-[0.3em] text-aged-gold mb-8 text-center">— Inquire Directly —</h4>
+                  <h4 className="font-sans text-xs sm:text-[16px] uppercase tracking-[0.2em] sm:tracking-[0.3em] text-aged-gold mb-6 sm:mb-8 text-center">— Inquire Directly —</h4>
                   
                   <div className="space-y-4">
                     <a 
