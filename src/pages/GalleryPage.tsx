@@ -2,14 +2,18 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
 import type { Artwork } from '../lib/data';
+import { ARTWORKS } from '../data/artworks';
 import { ArtworkCard } from '../components/Gallery/ArtworkCard';
 import { Lightbox } from '../components/Gallery/Lightbox';
 import { InquiryPanel } from '../components/Gallery/InquiryPanel';
 import { Footer } from '../components/Footer/Footer';
-import { supabase } from '../lib/supabase';
+
+const STATIC_ARTWORKS: Artwork[] = ARTWORKS
+  .filter(item => item.is_visible !== false)
+  .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
 
 export function GalleryPage() {
-  const [items, setItems] = useState<Artwork[]>([]);
+  const [items] = useState<Artwork[]>(STATIC_ARTWORKS);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
   const [inquiryArtwork, setInquiryArtwork] = useState<Artwork | null>(null);
@@ -31,42 +35,6 @@ export function GalleryPage() {
       }
     }
   }, [searchParams, items]);
-
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const { data, error } = await supabase
-          .from('artworks')
-          .select('*')
-          .eq('is_visible', true)
-          .order('display_order', { ascending: true });
-
-        if (error) {
-          console.error('Failed to load artworks from Supabase:', error.message);
-          return;
-        }
-
-        if (data) {
-          const mappedData = data.map((doc: any) => ({
-            id: doc.id,
-            title: doc.title || 'Untitled',
-            medium: doc.medium || '',
-            size: doc.size_cm || '',
-            category: doc.category || '',
-            aspectRatio: 0.85,
-            imageUrl: doc.image_url || undefined,
-            description: doc.description || '',
-            isSold: doc.is_sold || false,
-          } as Artwork));
-
-          setItems(mappedData);
-        }
-      } catch (err) {
-        console.error('Failed to load artworks:', err);
-      }
-    }
-    loadData();
-  }, []);
 
   return (
     <main className="w-full bg-near-black text-warm-ivory min-h-screen">

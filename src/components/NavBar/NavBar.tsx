@@ -9,8 +9,7 @@ export function NavBar() {
     { label: 'Canvas', ariaLabel: 'Immersive Infinite Canvas', link: '/canvas' },
     { label: 'Exhibit', ariaLabel: 'Experience 3D Gallery', link: '/exhibit' },
     { label: 'About', ariaLabel: 'Learn about Deepak Patil', link: '/about' },
-    { label: 'Inquiry', ariaLabel: 'Make an Inquiry', link: '/inquiry' },
-    { label: 'Admin', ariaLabel: 'Admin Dashboard', link: '/admin' }
+    { label: 'Inquiry', ariaLabel: 'Make an Inquiry', link: '/inquiry' }
   ];
 
   const socialItems: StaggeredMenuSocialItem[] = [

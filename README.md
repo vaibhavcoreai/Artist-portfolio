@@ -22,6 +22,14 @@ A premium, high-performance portfolio for Solapur-based fine artist **Deepak Pat
 
 
 
+## 🎨 Adding New Artworks
+
+Run the CLI helper with an image path:
+```bash
+node scripts/add-artwork.mjs ./path-to-image.jpg
+```
+Follow the interactive prompts for title, medium, size, category, description, and sold status. The script automatically converts the image to full-size and thumbnail WebP formats and appends the entry to `src/data/artworks.ts`.
+
 ## 🔒 Security
 
 This project follows strict security practices. Environment variables are managed via `.env` (excluded from git), and sensitive actions like artwork deletion require administrative authentication.

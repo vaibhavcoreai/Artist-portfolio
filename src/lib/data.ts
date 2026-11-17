@@ -8,8 +8,11 @@ export interface Artwork {
   category: string;
   aspectRatio: number;
   imageUrl?: string;
+  thumbnailUrl?: string;
   description?: string;
   isSold?: boolean;
+  display_order?: number;
+  is_visible?: boolean;
 }
 
 export const ARTWORKS: Artwork[] = [

@@ -3,7 +3,6 @@ import { Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { NavBar } from './components/NavBar/NavBar';
 import { Home } from './pages/Home';
-import { Admin } from './pages/Admin';
 import { AboutPage } from './pages/AboutPage';
 import { GalleryPage } from './pages/GalleryPage';
 import { DoomGalleryPage } from './pages/DoomGalleryPage';
@@ -35,7 +34,6 @@ export default function App() {
           <PageTransition>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/admin/*" element={<Admin />} />
               <Route path="/gallery" element={<GalleryPage />} />
               <Route path="/exhibit" element={<DoomGalleryPage />} />
               <Route path="/canvas" element={<CanvasGalleryPage />} />
